@@ -1,0 +1,1834 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Heart Team Tracker</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+:root{
+  --ground:#F3F5F4; --surface:#FFFFFF; --surface-2:#EDF1F0; --ink:#0F2129; --muted:#4A5B63; --line:#D5DDDC; --line-strong:#6F8085; --field:#FFFFFF; --placeholder:#5E6E75; --picker:none;
+  --brand:#0B3B47; --brand-2:#14535F; --on-brand:#F1F7F6; --on-brand-muted:#C2DADC;
+  --accent:#0E6A78; --accent-ink:#FFFFFF; --accent-soft:#DDEEF0; --heart:#D0473B;
+  --amber:#8A5100; --amber-soft:#FBEBD2; --blue:#27559C; --blue-soft:#E0E8F6;
+  --green:#1D7148; --green-soft:#DCF0E4; --grey:#55626A; --grey-soft:#E6EBEC; --red:#A8261E; --red-soft:#F8DEDB;
+  --violet:#5F45A0; --violet-soft:#ECE6F7;
+  --shadow:0 1px 2px rgba(15,33,41,.05),0 8px 24px rgba(15,33,41,.07);
+  --shadow-lg:0 18px 50px rgba(8,30,38,.22);
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",-apple-system,"Segoe UI",Roboto,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --ground:#0D161A; --surface:#172429; --surface-2:#203138; --ink:#F3F7F7; --muted:#BCCACE; --line:#33474F; --line-strong:#8FA8AF; --field:#0F1A1E; --placeholder:#93A6AB; --picker:invert(1);
+  --brand:#0A2B33; --brand-2:#0F3D48; --on-brand:#F3F8F8; --on-brand-muted:#C6DCDE;
+  --accent:#72CAD6; --accent-ink:#03242A; --accent-soft:#18393F; --heart:#F07A6E;
+  --amber:#F7C574; --amber-soft:#3D2E14; --blue:#A9C4F4; --blue-soft:#1E2D4A; --green:#86DFAE; --green-soft:#153826;
+  --grey:#C3CDD1; --grey-soft:#26353B; --red:#F59D94; --red-soft:#42201C; --violet:#C9B7F5; --violet-soft:#2D2444;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); --shadow-lg:0 18px 50px rgba(0,0,0,.55);
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0D161A; --surface:#172429; --surface-2:#203138; --ink:#F3F7F7; --muted:#BCCACE; --line:#33474F; --line-strong:#8FA8AF; --field:#0F1A1E; --placeholder:#93A6AB; --picker:invert(1);
+  --brand:#0A2B33; --brand-2:#0F3D48; --on-brand:#F3F8F8; --on-brand-muted:#C6DCDE;
+  --accent:#72CAD6; --accent-ink:#03242A; --accent-soft:#18393F; --heart:#F07A6E;
+  --amber:#F7C574; --amber-soft:#3D2E14; --blue:#A9C4F4; --blue-soft:#1E2D4A; --green:#86DFAE; --green-soft:#153826;
+  --grey:#C3CDD1; --grey-soft:#26353B; --red:#F59D94; --red-soft:#42201C; --violet:#C9B7F5; --violet-soft:#2D2444;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); --shadow-lg:0 18px 50px rgba(0,0,0,.55);
+}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:0 110px}
+.wrap{max-width:1040px;margin:0 auto}
+h1,h2,h3{margin:0;text-wrap:balance}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#sheetTitle:focus{outline:none}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+::placeholder{color:var(--placeholder);opacity:1;font-style:italic}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.hero{margin-inline:-16px;padding-inline:16px;background:radial-gradient(120% 140% at 100% 0%,var(--brand-2) 0%,var(--brand) 55%);color:var(--on-brand);position:relative;overflow:hidden;border-radius:0 0 26px 26px}
+.hero .ecg{position:absolute;left:0;right:0;top:118px;width:100%;height:70px;opacity:.2;pointer-events:none}
+.hero-in{position:relative;padding-block:14px 20px}
+.topbar{display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.brand b{font-weight:600;font-size:14px;letter-spacing:.01em}
+.brand span{font-size:12px;color:var(--on-brand-muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.me{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:4px 12px 4px 4px;font-size:13px;flex:none;max-width:52%}
+.me img{width:28px;height:28px;border-radius:50%}
+.me .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.me .role{font-size:11px;color:var(--on-brand-muted)}
+.greet{margin-block:22px 18px}
+.greet .eyebrow{color:var(--on-brand-muted)}
+.greet h1{font-family:var(--serif);font-weight:500;font-size:clamp(26px,5.4vw,36px);line-height:1.12;letter-spacing:-.01em;margin-top:6px}
+.greet p{margin:8px 0 0;color:var(--on-brand-muted);font-size:14px;max-width:60ch}
+.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:var(--on-brand);border-radius:14px;padding:12px 12px 10px;text-align:left;display:flex;flex-direction:column;gap:4px;transition:background .15s}
+.stat:hover{background:rgba(255,255,255,.12)}
+.stat .n{font-family:var(--serif);font-size:30px;font-weight:500;line-height:1;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12px;color:var(--on-brand-muted);display:flex;align-items:center;gap:6px;line-height:1.25}
+.stat .dot{width:7px;height:7px;border-radius:50%;flex:none}
+.stat[aria-pressed="true"]{background:var(--on-brand);color:var(--brand);border-color:var(--on-brand)}
+.stat[aria-pressed="true"] .l{color:var(--brand)}
+@media (max-width:760px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat .n{font-size:26px}}
+@media (max-width:420px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-block:18px 12px}
+.act{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;gap:12px;align-items:center;text-align:left;box-shadow:var(--shadow);transition:transform .12s,border-color .12s}
+.act:hover{border-color:var(--accent);transform:translateY(-1px)}
+.act .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);flex:none}
+.act.primary .ic{background:var(--accent);color:var(--accent-ink)}
+.act b{display:block;font-weight:600;font-size:14.5px}
+.act small{display:block;color:var(--muted);font-size:12.5px;line-height:1.3}
+@media (max-width:680px){.actions{grid-template-columns:1fr}.act{padding:12px}}
+
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;text-align:left;display:flex;align-items:center;gap:10px}
+button.kpi:hover{border-color:var(--accent)}
+.kpi[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.kpi .v{font-family:var(--serif);font-size:26px;font-weight:500;line-height:1;font-variant-numeric:tabular-nums;min-width:34px}
+.kpi .v.warn{color:var(--red)}
+.kpi .t{font-size:12.5px;color:var(--muted);line-height:1.3}
+@media (max-width:680px){.kpis{grid-template-columns:1fr 1fr}.kpis .kpi:last-child{grid-column:1/-1}}
+
+.alert{display:flex;gap:10px;align-items:center;background:var(--blue-soft);color:var(--blue);border-radius:14px;padding:11px 14px;font-size:14px;width:100%;border:0;text-align:left;margin-bottom:12px}
+.alert.draft{background:var(--amber-soft);color:var(--amber)}
+.alert b{font-weight:600}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.search{flex:1;min-width:200px;position:relative}
+.search input{width:100%;font-size:16px;padding:11px 12px 11px 38px;background:var(--field);color:var(--ink);border:1px solid var(--line-strong);border-radius:12px;background:var(--surface);box-shadow:var(--shadow)}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.btn{border:1px solid var(--line-strong);background:var(--surface);border-radius:11px;padding:9px 14px;font-weight:500;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px}
+.btn:hover{background:var(--surface-2)}
+.btn.small{min-height:34px;padding:6px 11px;font-size:13.5px}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.danger{color:var(--red);border-color:var(--red)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--accent)}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.filterline{font-size:13px;color:var(--muted);margin:-4px 0 10px;display:flex;gap:8px;align-items:center}
+.filterline button{border:0;background:none;color:var(--accent);padding:0;font-weight:500}
+
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.list{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;text-align:left;width:100%;box-shadow:var(--shadow);transition:border-color .12s;cursor:pointer}
+.card:hover{border-color:var(--accent)}
+.c-top{display:flex;gap:10px;align-items:flex-start}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:13px;flex:none;background:var(--c-soft);color:var(--c);letter-spacing:.02em}
+.who{flex:1;min-width:0}
+.name{font-weight:600;font-size:15.5px;display:flex;align-items:center;gap:6px;overflow-wrap:anywhere}
+.sub{font-size:13.5px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;border-radius:999px;padding:3px 9px;white-space:nowrap;flex:none}
+.c-dx{font-size:14px;font-weight:500}
+.metrics{display:flex;gap:6px;flex-wrap:wrap}
+.m{display:inline-flex;align-items:baseline;gap:5px;border:1px solid var(--line);border-radius:8px;padding:3px 8px;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+.m i{font-style:normal;font-family:var(--sans);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.c-dec{font-size:13.5px;background:var(--surface-2);border-radius:10px;padding:8px 10px;display:flex;gap:8px;align-items:flex-start}
+.c-dec .k{font-weight:600;white-space:nowrap}
+.c-foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:9px}
+.verif{display:inline-flex;gap:3px;align-items:center}
+.verif i{width:18px;height:5px;border-radius:3px;background:var(--line-strong);opacity:.55}
+.verif i.on{opacity:1}
+.verif i.on{background:var(--green)}
+.tx{display:inline-flex;align-items:center;gap:4px;color:var(--accent);font-weight:500}
+.wait{color:var(--amber);font-weight:600;font-variant-numeric:tabular-nums}
+.wait.over{color:var(--red)}
+.chk{color:var(--amber);font-weight:600}
+.grow{flex:1}
+.vq{display:flex;gap:10px;align-items:center;border-top:1px dashed var(--line);padding-top:10px;flex-wrap:wrap}
+.vq .ph{width:52px;height:66px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);overflow:hidden;flex:none}
+.vq .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.vq .why{font-size:12.5px;color:var(--amber);flex:1;min-width:150px}
+.empty{grid-column:1/-1;background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:32px 20px;text-align:center;color:var(--muted)}
+
+.gate{max-width:460px;margin:28px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.gate h2{font-family:var(--serif);font-weight:500;font-size:24px}
+.gate p{margin:0;color:var(--muted)}
+.gate select{font-size:16px;min-height:46px;background-color:var(--field);padding:10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface)}
+
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;box-shadow:var(--shadow-lg);border-radius:16px;padding:14px 18px;font-size:15px}
+@media (min-width:681px){.fab{display:none}}
+
+.overlay{position:fixed;inset:0;z-index:20;background:rgba(6,18,22,.5);display:flex;justify-content:center;align-items:flex-end}
+@media (min-width:760px){.overlay{align-items:center;padding:24px}}
+.sheet{background:var(--ground);width:100%;max-width:840px;max-height:100%;overflow:auto;border-radius:22px 22px 0 0;box-shadow:var(--shadow-lg);display:flex;flex-direction:column}
+@media (min-width:760px){.sheet{border-radius:22px;max-height:92vh}}
+@media (max-height:600px){.overlay{padding:0!important;align-items:stretch!important}.sheet{max-width:none;height:100%;max-height:100%!important;border-radius:0!important}
+  .sheet-head{padding:calc(8px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) 8px max(18px,env(safe-area-inset-left,0px))}.sheet-head h2{font-size:19px}
+  .sheet-body{padding-inline:max(18px,env(safe-area-inset-left,0px)) max(18px,env(safe-area-inset-right,0px))}.sheet-foot{padding-block:8px calc(8px + env(safe-area-inset-bottom,0px))}}
+.sheet-head{position:sticky;top:0;z-index:2;background:var(--ground);display:flex;align-items:center;gap:10px;padding:calc(16px + env(safe-area-inset-top,0px)) 18px 12px;border-bottom:1px solid var(--line)}
+.sheet-head h2{font-family:var(--serif);font-weight:500;font-size:22px;flex:1;display:flex;align-items:center;gap:8px;min-width:0}
+.sheet-body{padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.sheet-foot{position:sticky;bottom:0;background:var(--ground);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
+.foot-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.foot-row .spacer{flex:1}
+
+fieldset,.sec{border:1px solid var(--line);background:var(--surface);border-radius:14px;margin:0}
+fieldset{padding:12px 14px 14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-width:0;max-width:100%}
+.sheet-body>*,.sec .inner>*,fieldset>*,.range>*,.who3>*{min-width:0;max-width:100%}
+legend{padding:0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--accent)}
+.f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.f.wide,.att,.span{grid-column:1/-1}
+.f label{font-size:14px;color:var(--muted);font-weight:500}
+.f label small{font-weight:400}
+.f input,.f select,.f textarea{display:block;width:100%;max-width:100%;min-width:0;min-height:46px;padding:10px 12px;border:1.5px solid var(--line-strong);border-radius:10px;background-color:var(--field);color:var(--ink);font-size:16px;line-height:1.3}
+input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-align:left}
+input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
+input[type=date]::-webkit-calendar-picker-indicator{filter:var(--picker);opacity:.9}
+select{-webkit-appearance:none;appearance:none;padding-right:38px!important;background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),linear-gradient(135deg,var(--ink) 50%,transparent 50%);background-position:calc(100% - 20px) 55%,calc(100% - 14px) 55%;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+.f input:disabled,.f select:disabled,.f textarea:disabled{background:var(--surface-2);color:var(--muted);border-style:dashed;opacity:1;-webkit-text-fill-color:var(--muted)}
+.f textarea{min-height:60px;resize:vertical}
+.f input.num{font-family:var(--mono)}
+.f.unsure input,.f.unsure textarea,.f.unsure select{border-color:var(--amber);background:var(--amber-soft)}
+.f.unsure label::after{content:" · periksa lagi";color:var(--amber);font-weight:600}
+.f .prev{font-size:12px;color:var(--muted)}
+.f .prev button{border:0;background:none;color:var(--accent);padding:0 0 0 4px;font-size:12px}
+.check{display:flex;align-items:center;gap:10px;font-size:15px;min-height:44px}
+.check input{width:22px;height:22px;accent-color:var(--accent);flex:none}
+.hist{grid-column:1/-1;font-size:12.5px;color:var(--muted);background:var(--surface-2);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:3px}
+.sigmeta{font-size:11.5px;color:var(--green)}
+.who3{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px;align-items:end;grid-column:1/-1;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+@media (max-width:560px){fieldset,.sec .inner{grid-template-columns:1fr!important}.who3{grid-template-columns:1fr 1fr}.who3 .f:first-child{grid-column:1/-1}}
+
+.sec summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.sec summary::-webkit-details-marker{display:none}
+.sec summary .t{font-weight:600;font-size:15px;white-space:nowrap}
+.sec summary .s{font-size:13.5px;color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sec summary .chev{transition:transform .15s;color:var(--muted);flex:none}
+.sec[open] summary .chev{transform:rotate(90deg)}
+.sec .inner{padding:0 14px 14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}
+.sec.three .inner{grid-template-columns:repeat(3,minmax(0,1fr))}
+.group-title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--accent);margin:4px 0 -4px 4px}
+
+.att{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:10px}
+.att.hero-att{border:1.5px dashed var(--accent);background:var(--accent-soft);border-radius:14px;padding:12px}
+.att .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap}
+.th{position:relative}
+.thimg{padding:0;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface-2);width:78px;height:98px;display:block}
+.thimg img{width:100%;height:100%;object-fit:cover;display:block}
+.thx{position:absolute;top:-7px;right:-7px;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--red);font-size:15px;line-height:1;padding:0}
+.status-line{font-size:14px;color:var(--muted)}
+.status-line.err{color:var(--red)}
+.status-line.ok{color:var(--green)}
+.banner{border-radius:12px;padding:10px 12px;font-size:13.5px;display:flex;gap:8px 10px;align-items:center;flex-wrap:wrap}
+.banner.warn{background:var(--amber-soft);color:var(--amber)}
+.banner.lock{background:var(--blue-soft);color:var(--blue)}
+.banner.err{background:var(--red-soft);color:var(--red)}
+.banner .grow{min-width:180px}
+.banner input{flex:1;min-width:0;width:100%;font-size:16px;padding:8px 10px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+.ucheck{display:inline-flex;align-items:stretch;border:1px solid var(--amber);border-radius:999px;overflow:hidden;font-size:12.5px}
+.ucheck button{border:0;background:var(--surface);color:var(--amber);padding:3px 9px}
+.ucheck button+button{border-left:1px solid var(--amber)}
+.log{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px;margin:0;padding-left:18px}
+.log li.lk{color:var(--blue)}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--red-soft);color:var(--red);border-radius:12px;padding:8px 10px;font-size:13px}
+.confirm.soft{background:var(--amber-soft);color:var(--amber)}
+
+.drop{border:1.5px dashed var(--accent);background:var(--accent-soft);border-radius:16px;padding:26px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;cursor:pointer}
+.drop.over{background:var(--surface)}
+.drop .ic{width:52px;height:52px;border-radius:16px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center}
+.drop b{font-size:15.5px}
+.drop small{color:var(--muted)}
+.fmts{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.fmts span{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:2px 7px}
+.progress{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.irow{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start}
+.irow>input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);margin-top:8px}
+.irow .body{display:flex;flex-direction:column;gap:6px;min-width:0}
+.irow .hd{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}
+.irow .hd input{width:100%;min-width:0;font-size:16px;background:var(--field);padding:9px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface)}
+.irow .hd input.need{border-color:var(--red);background:var(--red-soft)}
+.irow .dec{font-size:13px;color:var(--muted)}
+.irow .chg{font-size:12.5px;color:var(--ink);background:var(--surface-2);border-radius:8px;padding:6px 8px;display:flex;flex-direction:column;gap:2px}
+.irow .chg s{color:var(--muted)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table.rep{border-collapse:collapse;width:100%;min-width:720px;font-size:12.5px}
+table.rep th{background:var(--brand);color:var(--on-brand);text-align:left;padding:8px;font-weight:600;font-size:12px}
+table.rep td{border-top:1px solid var(--line);padding:8px;vertical-align:top}
+table.rep tr.grp td{background:var(--surface-2);font-weight:600;color:var(--accent)}
+table.rep td.pre{white-space:pre-line}
+.range{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.range{grid-template-columns:1fr 1fr}.range .f:last-child{grid-column:1/-1}}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:12.5px}
+.chips button:hover{border-color:var(--accent)}
+.kgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.kgrid div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px}
+.kgrid b{display:block;font-family:var(--serif);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
+.kgrid span{font-size:12px;color:var(--muted)}
+@media (max-width:560px){.kgrid{grid-template-columns:1fr 1fr}}
+
+.people{display:flex;flex-direction:column;gap:8px}
+.person{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.person img{width:32px;height:32px;border-radius:50%}
+.person .pn{flex:1;min-width:140px}
+.person .pn div{font-weight:600}
+.person .role{font-size:12px;color:var(--muted)}
+.person select{font-size:16px;min-height:42px;background-color:var(--field);padding:7px 8px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface)}
+.perm{font-size:12.5px;color:var(--muted);margin:0;padding-left:18px;display:flex;flex-direction:column;gap:2px}
+
+.lightbox{position:fixed;inset:0;z-index:30;background:rgba(4,10,12,.94);display:flex;flex-direction:column}
+.lightbox .lb-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;color:#fff;font-size:13px}
+.lightbox .lb-bar .btn{background:transparent;color:#fff;border-color:rgba(255,255,255,.3)}
+.lightbox .lb-img{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:0 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.lightbox img{max-width:100%;max-height:100%;cursor:zoom-in}
+.lightbox.zoom .lb-img{align-items:flex-start;justify-content:flex-start}
+.lightbox.zoom img{max-width:none;max-height:none;cursor:zoom-out}
+
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:10px 16px;border-radius:12px;font-size:13.5px;z-index:40;box-shadow:var(--shadow-lg);max-width:calc(100% - 32px)}
+.note{font-size:12px;color:var(--muted);margin:18px 0 0;text-align:center}
+@media (prefers-reduced-motion:no-preference){.sheet{animation:up .24s cubic-bezier(.2,.8,.2,1)}@keyframes up{from{transform:translateY(28px)}}}
+</style>
+<style id="premium">
+/* ===== Heart Team Tracker — lapisan tampilan premium (hanya CSS, logika tidak diubah) ===== */
+:root{
+  --ground:#EEF2F5;--surface:#FFFFFF;--surface-2:#F3F6F8;--ink:#0B1D28;--muted:#4F616C;--line:#DCE3E8;--line-strong:#80909B;
+  --brand:#08222F;--brand-2:#0D3A4C;--on-brand-muted:#B9D3D8;--accent:#0B6F7E;--accent-soft:#DCEEF1;--heart:#C62D3F;
+  --shadow:0 1px 1px rgba(11,29,40,.04),0 3px 8px rgba(11,29,40,.04),0 16px 32px -16px rgba(11,29,40,.16);
+  --shadow-lg:0 24px 60px -12px rgba(5,20,28,.35);
+  --sans:"Plus Jakarta Sans","IBM Plex Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#08131A;--surface:#0F1E26;--surface-2:#162A34;--ink:#EEF4F6;--muted:#A9BAC1;--line:#22363F;--line-strong:#7F969F;--field:#0A161C;
+  --brand:#06202B;--brand-2:#0B3444;--accent:#5CC2D0;--accent-ink:#031F25;--accent-soft:#12343B;--heart:#F0707F;
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 14px 30px -14px rgba(0,0,0,.7);}}
+:root[data-theme="dark"]{
+  --ground:#08131A;--surface:#0F1E26;--surface-2:#162A34;--ink:#EEF4F6;--muted:#A9BAC1;--line:#22363F;--line-strong:#7F969F;--field:#0A161C;
+  --brand:#06202B;--brand-2:#0B3444;--accent:#5CC2D0;--accent-ink:#031F25;--accent-soft:#12343B;--heart:#F0707F;
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 14px 30px -14px rgba(0,0,0,.7);}
+body{font-feature-settings:"tnum" 1,"cv11" 1;-webkit-font-smoothing:antialiased}
+.eyebrow,legend,.group-title,.m i{text-transform:none;letter-spacing:0}
+.eyebrow{font-size:13px;font-weight:500}
+
+/* Hero */
+.hero{background:radial-gradient(90% 120% at 100% -10%,rgba(92,194,208,.28) 0,transparent 55%),linear-gradient(160deg,var(--brand-2),var(--brand) 62%);border-radius:0 0 30px 30px;box-shadow:0 20px 40px -24px rgba(5,20,28,.5)}
+.hero .ecg{opacity:.16;top:auto;bottom:6px;height:56px;z-index:0}.hero-in{z-index:1}
+.brand b{font-size:15px;font-weight:700;letter-spacing:-.005em}
+.me{background:rgba(255,255,255,.07);backdrop-filter:blur(8px)}
+.greet h1{font-size:clamp(28px,5vw,42px);font-weight:500;letter-spacing:-.02em;line-height:1.08}
+.greet p{font-size:14.5px}
+.stats{gap:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:20px;overflow:hidden;backdrop-filter:blur(10px)}
+.stat{background:transparent;border:0;border-right:1px solid rgba(255,255,255,.1);border-radius:0;padding:16px 16px 14px;gap:8px}
+.stat:last-child{border-right:0}
+.stat .n{font-size:38px;letter-spacing:-.02em}
+.stat .l{font-size:12.5px;font-weight:500}
+.stat:hover{background:rgba(255,255,255,.09)}
+.stat[aria-pressed="true"]{background:var(--on-brand);border-color:transparent}
+@media (max-width:760px){.stats{gap:8px;background:none;border:0;border-radius:0;backdrop-filter:none;overflow:visible}
+  .stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px}.stat .n{font-size:30px}}
+
+/* Aksi & KPI */
+.actions{gap:12px;margin-block:22px 14px}
+.act{border-radius:18px;padding:16px;transition:border-color .15s,box-shadow .15s}
+.act:hover{transform:none;border-color:var(--accent);box-shadow:0 1px 1px rgba(11,29,40,.05),0 10px 24px -10px rgba(11,111,126,.35)}
+.act .ic{border-radius:13px}
+.act b{font-size:15px;font-weight:700}
+.act.primary{background:linear-gradient(135deg,var(--accent),#0A5563);border-color:transparent;color:#fff}
+.act.primary small{color:rgba(255,255,255,.82)}
+.act.primary .ic{background:rgba(255,255,255,.18);color:#fff}
+.kpis{gap:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px}
+.kpi{background:transparent;border:0;border-right:1px solid var(--line);border-radius:0;padding:16px 18px;gap:12px}
+.kpi:last-child{border-right:0}
+button.kpi:hover{background:var(--surface-2)}
+.kpi[aria-pressed="true"]{box-shadow:inset 0 -3px 0 var(--accent);background:var(--accent-soft)}
+.kpi .v{font-size:32px;letter-spacing:-.02em}
+@media (max-width:680px){.kpis{gap:10px;background:none;border:0;box-shadow:none;overflow:visible}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px}}
+.alert{border-radius:14px;border:1px solid color-mix(in srgb,currentColor 22%,transparent);font-weight:500}
+
+/* Pencarian & tombol */
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-inline:-16px;padding:10px 16px;background:color-mix(in srgb,var(--ground) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.search input{box-shadow:none;border:1px solid var(--line-strong);border-radius:13px;padding-block:12px}
+.search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 20%,transparent)}
+.btn{border-radius:11px;font-weight:600;border-color:var(--line-strong)}
+.btn.primary{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 92%,#fff),var(--accent));box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 6px 14px -6px var(--accent)}
+
+/* Kartu pasien: rel warna status di kiri */
+.list{gap:12px}
+.card{position:relative;overflow:hidden;border-radius:18px;padding:16px 16px 14px 22px;gap:11px;transition:border-color .15s,box-shadow .15s}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c,var(--line-strong))}
+.card:hover{border-color:color-mix(in srgb,var(--accent) 55%,var(--line));box-shadow:0 1px 1px rgba(11,29,40,.05),0 18px 36px -16px rgba(11,29,40,.28)}
+.name{font-size:16px;font-weight:700;letter-spacing:-.005em}
+.sub{font-size:13px}
+.avatar{width:40px;height:40px;font-weight:700}
+.pill{font-size:12px;padding:4px 10px}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.c-dx{font-weight:600;line-height:1.35}
+.m{border:0;background:var(--surface-2);border-radius:8px;padding:4px 9px;font-size:13px}
+.m i{font-size:11.5px;font-weight:600}
+.c-dec{background:var(--surface-2);border-radius:12px;padding:9px 11px}
+.c-dec .k{color:var(--accent)}
+.c-foot{border-top-color:var(--line);font-size:12.5px}
+.verif i{width:22px;height:4px}
+.empty{border-radius:18px;padding:40px 20px}
+
+/* Gerbang masuk */
+.gate{max-width:480px;border-radius:24px;padding:32px;gap:14px;box-shadow:var(--shadow-lg)}
+.gate h2{font-size:28px;letter-spacing:-.015em}
+
+/* Lembar form */
+.overlay{background:rgba(5,17,24,.55);backdrop-filter:blur(6px)}
+.sheet{border-radius:26px 26px 0 0}@media (min-width:760px){.sheet{border-radius:26px}}
+.sheet-head{background:color-mix(in srgb,var(--ground) 90%,transparent);backdrop-filter:blur(12px)}
+.sheet-head h2{font-size:25px;letter-spacing:-.015em}
+fieldset,.sec{border-radius:18px;box-shadow:0 1px 1px rgba(11,29,40,.03)}
+legend{font-size:14px;font-weight:700;padding:0 8px}
+.f label{font-size:13.5px;font-weight:600;color:var(--ink)}
+.f input,.f select,.f textarea{border-width:1px;border-radius:11px}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 20%,transparent)}
+.sec summary{padding:14px 16px;border-radius:18px}.sec summary:hover{background:var(--surface-2)}
+.sec summary .t{font-weight:700}
+.group-title{font-size:13px;font-weight:700}
+.drop,.att.hero-att{border-radius:18px}
+.banner,.confirm{border-radius:13px}
+.tablewrap{border-radius:16px}
+table.rep th{font-weight:700}
+.person{border-radius:14px}
+.toast{border-radius:13px;font-weight:500}
+.note{font-size:12.5px;margin-top:24px}
+.fab{border-radius:18px;font-weight:700}
+
+@media (prefers-reduced-motion:no-preference){
+  .hero .ecg path{stroke-dasharray:3000;stroke-dashoffset:3000;animation:trace 2.2s .25s cubic-bezier(.4,0,.2,1) forwards}
+  @keyframes trace{to{stroke-dashoffset:0}}
+}
+</style>
+
+</head>
+<body>
+<script>
+/* ============ PENGATURAN (diisi oleh IT RS sebelum dipasang) ============
+   supabaseUrl      : Project URL dari Supabase (Project Settings → API)
+   supabaseAnonKey  : "anon public" key dari halaman yang sama
+   Jika dikosongkan, aplikasi akan menanyakannya sekali di tiap perangkat. */
+window.HTT_CONFIG={
+  supabaseUrl: "",
+  supabaseAnonKey: "",
+  emailDomain: "heartteam.app",   /* akun dibuat sebagai <id>@heartteam.app (tidak perlu email asli) */
+  idleLogoutMinutes: 30,          /* keluar otomatis bila tidak dipakai */
+  aiModel: "claude-sonnet-5"      /* dipakai bila kunci API Claude diisi di Pengaturan */
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+<script>
+/* Heart Team Tracker — penghubung Supabase (mode mandiri) */
+(function(){
+"use strict";
+const CFG=window.HTT_CONFIG||{};
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ls={get(k){try{return localStorage.getItem(k);}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}},del(k){try{localStorage.removeItem(k);}catch(e){}}};
+const DOMAIN=CFG.emailDomain||"heartteam.app";
+const IDLE_MIN=CFG.idleLogoutMinutes||30;
+let sb=null,session=null,resolveReady,readyP=new Promise(r=>resolveReady=r);
+
+function conf(){let saved=null;try{saved=JSON.parse(ls.get("htt.cfg")||"null");}catch(e){}return {url:(CFG.supabaseUrl||(saved&&saved.url)||"").trim(),key:(CFG.supabaseAnonKey||(saved&&saved.key)||"").trim()};}
+function gateHtml(html){const g=$("#gate");g.hidden=false;$("#app").hidden=true;$("#fab").hidden=true;g.innerHTML=html;}
+function msg(el,text,err){el.textContent=text;el.className="status-line"+(err?" err":" ok");}
+const field=(id,label,type,extra)=>`<div class="f"><label for="${id}">${label}</label><input id="${id}" type="${type||"text"}" ${extra||""}></div>`;
+
+/* ---------- setup (URL + anon key) ---------- */
+function showSetup(){
+  gateHtml(`<div class="eyebrow">Pemasangan pertama</div><h2>Hubungkan database</h2>
+    <p>Isi alamat proyek dan <i>anon public key</i> Supabase milik rumah sakit (menu Project Settings → API). Hanya perlu sekali di perangkat ini.</p>
+    ${field("cfgUrl","Project URL","url",'placeholder="https://xxxx.supabase.co" autocomplete="off"')}
+    ${field("cfgKey","Anon public key","text",'placeholder="eyJhbGciOi…" autocomplete="off"')}
+    <button class="btn primary" id="cfgSave">Simpan &amp; lanjut</button><p class="status-line" id="cfgMsg" role="status"></p>`);
+  $("#cfgSave").onclick=()=>{const url=$("#cfgUrl").value.trim().replace(/\/+$/,""),key=$("#cfgKey").value.trim();
+    if(!/^https:\/\/[a-z0-9-]+\.supabase\.(co|in)$/i.test(url)&&!/^https:\/\//.test(url)){msg($("#cfgMsg"),"Alamat harus diawali https://",true);return;}
+    if(key.length<20){msg($("#cfgMsg"),"Kunci terlalu pendek. Salin anon public key lengkap.",true);return;}
+    ls.set("htt.cfg",JSON.stringify({url,key}));start();};
+}
+
+/* ---------- login / register ---------- */
+const toEmail=id=>id.trim().toLowerCase()+"@"+DOMAIN;
+const validId=id=>/^[a-z0-9._-]{3,32}$/.test(id.trim().toLowerCase());
+function showLogin(note){
+  gateHtml(`<div class="eyebrow">Masuk</div><h2>Heart Team Tracker</h2><p>${note?esc(note):"Masuk dengan ID pengguna dan password Anda."}</p>
+    <form id="loginForm" style="display:flex;flex-direction:column;gap:12px">
+    ${field("lgId","ID pengguna","text",'autocomplete="username" autocapitalize="none" spellcheck="false" required')}
+    ${field("lgPw","Password","password",'autocomplete="current-password" required')}
+    <button class="btn primary" type="submit" id="lgBtn">Masuk</button></form>
+    <p class="status-line" id="lgMsg" role="status"></p>
+    <button class="btn ghost" id="toReg">Belum punya akun? Daftar</button>`);
+  $("#toReg").onclick=showRegister;
+  $("#loginForm").onsubmit=async e=>{e.preventDefault();const id=$("#lgId").value,pw=$("#lgPw").value;
+    if(!validId(id)){msg($("#lgMsg"),"ID pengguna 3–32 karakter: huruf kecil, angka, titik, garis bawah, atau strip.",true);return;}
+    $("#lgBtn").disabled=true;msg($("#lgMsg"),"Memeriksa…");
+    const {data,error}=await sb.auth.signInWithPassword({email:toEmail(id),password:pw});
+    $("#lgBtn").disabled=false;
+    if(error){msg($("#lgMsg"),/invalid/i.test(error.message)?"ID pengguna atau password salah.":/confirm/i.test(error.message)?"Akun belum aktif: pemilik perlu mematikan konfirmasi email di Supabase.":"Tidak bisa masuk: "+error.message,true);return;}
+    session=data.session;afterLogin();};
+  setTimeout(()=>{const i=$("#lgId");if(i)i.focus();},50);
+}
+function showRegister(){
+  gateHtml(`<div class="eyebrow">Akun baru</div><h2>Daftar</h2><p>Setelah mendaftar, pemilik aplikasi perlu menyetujui dan memberi peran sebelum data pasien terlihat.</p>
+    <form id="regForm" style="display:flex;flex-direction:column;gap:12px">
+    ${field("rgName","Nama lengkap dengan gelar","text",'autocomplete="name" placeholder="mis. dr. Sekar, SpJP" required')}
+    ${field("rgId","ID pengguna","text",'autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="mis. sekar" required')}
+    ${field("rgPw","Password (minimal 8 karakter)","password",'autocomplete="new-password" required')}
+    ${field("rgPw2","Ulangi password","password",'autocomplete="new-password" required')}
+    <button class="btn primary" type="submit" id="rgBtn">Daftar</button></form>
+    <p class="status-line" id="rgMsg" role="status"></p>
+    <button class="btn ghost" id="toLogin">Sudah punya akun? Masuk</button>`);
+  $("#toLogin").onclick=()=>showLogin();
+  $("#regForm").onsubmit=async e=>{e.preventDefault();
+    const name=$("#rgName").value.trim(),id=$("#rgId").value.trim().toLowerCase(),pw=$("#rgPw").value,pw2=$("#rgPw2").value;const m=$("#rgMsg");
+    if(name.length<3){msg(m,"Isi nama lengkap.",true);return;}
+    if(!validId(id)){msg(m,"ID pengguna 3–32 karakter: huruf kecil, angka, titik, garis bawah, atau strip.",true);return;}
+    if(pw.length<8){msg(m,"Password minimal 8 karakter.",true);return;}
+    if(pw!==pw2){msg(m,"Kedua password tidak sama.",true);return;}
+    $("#rgBtn").disabled=true;msg(m,"Membuat akun…");
+    const {data,error}=await sb.auth.signUp({email:toEmail(id),password:pw,options:{data:{name,username:id}}});
+    $("#rgBtn").disabled=false;
+    if(error){msg(m,/registered|exists/i.test(error.message)?"ID pengguna sudah dipakai. Pilih ID lain.":"Gagal mendaftar: "+error.message,true);return;}
+    if(!data.session){showLogin("Akun dibuat, tetapi belum aktif. Pemilik perlu mematikan \"Confirm email\" di Supabase (Authentication → Sign In / Providers → Email), lalu Anda bisa masuk.");return;}
+    session=data.session;afterLogin();};
+}
+
+/* ---------- db adapter (same interface as the claude.ai runtime) ---------- */
+function makeDb(){
+  const parent=p=>p.split("/").slice(0,-1).join("/");
+  const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
+  const snap=(path,row)=>({id:path.split("/").pop(),exists:!!row,data:()=>row?clone(row.data):undefined,metadata:{fromCache:false,hasPendingWrites:false}});
+  const toErr=e=>{const m=String((e&&(e.message||e.details))||e||"");return {code:/P0002|invalid_argument|row-level|violates|terkunci|Hanya|permission/i.test(m)?"invalid_argument":/quota|size|too large/i.test(m)?"quota_exceeded":"unavailable",message:m};};
+  const docL=new Map(),colL=new Map(),cols=new Map();
+  function emitCol(c){const m=cols.get(c);if(!m)return;const docs=[...m.keys()].sort().map(p=>snap(p,m.get(p)));const qs={docs,size:docs.length,empty:!docs.length,docChanges:()=>[],metadata:{fromCache:false,hasPendingWrites:false}};(colL.get(c)||[]).forEach(f=>{try{f(qs);}catch(e){console.error(e);}});}
+  function changed(path,row){const c=parent(path);if(cols.has(c)){const m=cols.get(c);if(row)m.set(path,row);else m.delete(path);emitCol(c);}(docL.get(path)||[]).forEach(f=>{try{f(snap(path,row));}catch(e){console.error(e);}});}
+  async function fetchDoc(path){const {data,error}=await sb.from("docs").select("path,data").eq("path",path).maybeSingle();if(error)throw toErr(error);return data;}
+  async function fetchCol(c){let all=[],from=0;for(;;){const {data,error}=await sb.from("docs").select("path,data").eq("collection",c).order("path").range(from,from+999);if(error)throw toErr(error);all=all.concat(data||[]);if(!data||data.length<1000)break;from+=1000;}return all;}
+  async function refreshCol(c){const rows=await fetchCol(c);const m=new Map(rows.map(r=>[r.path,r]));cols.set(c,m);emitCol(c);}
+  async function refreshDoc(path){const r=await fetchDoc(path);(docL.get(path)||[]).forEach(f=>f(snap(path,r)));}
+  let channel=null;
+  function ensureChannel(){if(channel)return;
+    channel=sb.channel("htt-docs").on("postgres_changes",{event:"*",schema:"public",table:"docs",filter:"collection=in.(patients,staff,requests,profiles)"},pl=>{
+      const path=(pl.new&&pl.new.path)||(pl.old&&pl.old.path);if(!path)return;
+      if(pl.eventType==="DELETE"){changed(path,null);return;}
+      if(pl.new&&pl.new.data)changed(path,{path,data:pl.new.data});else fetchDoc(path).then(r=>changed(path,r)).catch(()=>{});
+    }).subscribe();}
+  setInterval(()=>{if(document.visibilityState!=="visible")return;cols.forEach((_,c)=>{if((colL.get(c)||[]).length)refreshCol(c).catch(()=>{});});docL.forEach((fs,p)=>{if(fs.length&&!cols.has(parent(p)))refreshDoc(p).catch(()=>{});});},20000);
+  const rid=()=>(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)).replace(/-/g,"").slice(0,20);
+  function docRef(path){return {id:path.split("/").pop(),path,
+    async get(){return snap(path,await fetchDoc(path));},
+    async set(d){const row={path,collection:parent(path),data:clone(d)};const {error}=await sb.from("docs").upsert(row,{onConflict:"path"});if(error)throw toErr(error);changed(path,{path,data:row.data});},
+    async update(d){const {error}=await sb.rpc("htt_update",{p_path:path,p_patch:clone(d)});if(error)throw toErr(error);changed(path,await fetchDoc(path));},
+    async delete(){const {error}=await sb.from("docs").delete().eq("path",path);if(error)throw toErr(error);changed(path,null);},
+    async acquire(){return {acquired:true};},
+    onSnapshot(next,err){ensureChannel();const a=docL.get(path)||[];a.push(next);docL.set(path,a);fetchDoc(path).then(r=>next(snap(path,r))).catch(e=>err&&err(toErr(e)));return ()=>{const b=docL.get(path)||[];docL.set(path,b.filter(f=>f!==next));};},
+    collection(p){return colRef(path+"/"+p);}};}
+  function colRef(path){const self={path,doc:id=>docRef(path+"/"+(id||rid())),async add(d){const r=docRef(path+"/"+rid());await r.set(d);return r;},
+    async get(){const rows=await fetchCol(path);const docs=rows.map(r=>snap(r.path,r));return {docs,size:docs.length,empty:!docs.length,docChanges:()=>[],metadata:{fromCache:false,hasPendingWrites:false}};},
+    onSnapshot(next,err){ensureChannel();const a=colL.get(path)||[];a.push(next);colL.set(path,a);refreshCol(path).catch(e=>err&&err(toErr(e)));return ()=>{const b=colL.get(path)||[];colL.set(path,b.filter(f=>f!==next));};},
+    where(){return self;},orderBy(){return self;},limit(){return self;}};return self;}
+  return {doc:docRef,collection:colRef};
+}
+
+/* ---------- user adapter ---------- */
+function avatar(name){const w=String(name||"?").replace(/^(dr|drg|prof|ns|tn|ny)\.?\s+/i,"").trim().split(/\s+/);const t=((w[0]||"?")[0]+(w[1]?w[1][0]:"")).toUpperCase();
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" rx="32" fill="#14535F"/><text x="32" y="41" font-family="Arial" font-size="24" font-weight="700" fill="#fff" text-anchor="middle">${t.replace(/[<&>]/g,"")}</text></svg>`;
+  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);}
+function makeUser(){
+  const uid=session.user.id;const meta=session.user.user_metadata||{};const myName=meta.name||meta.username||"Pengguna";
+  return {
+    async id(){return uid;},
+    async me(){let owner=false;try{const r=await sb.rpc("htt_no_owner");owner=r.data===true;}catch(e){}
+      if(!owner){try{const {data}=await sb.from("docs").select("data").eq("path","staff/"+uid).maybeSingle();owner=!!(data&&data.data&&data.data.role==="superadmin");}catch(e){}}
+      return {id:uid,name:myName,avatarUrl:avatar(myName),email:null,isOwner:owner,canEdit:true};},
+    async isOwner(){return (await this.me()).isOwner;},
+    async canEdit(){return true;},async can(){return true;},
+    async profiles(ids){ids=[].concat(ids).filter(Boolean);const out={};ids.forEach(i=>{out[i]={id:i,name:"",avatarUrl:avatar("?"),email:null,isMe:i===uid,guest:false};});
+      if(!ids.length)return out;try{const {data}=await sb.from("docs").select("path,data").in("path",ids.map(i=>"profiles/"+i));(data||[]).forEach(r=>{const i=r.path.split("/")[1];const n=(r.data&&r.data.name)||"";out[i]={id:i,name:n,avatarUrl:avatar(n),email:null,isMe:i===uid,guest:false};});}catch(e){}
+      return out;},
+    async name(){return myName;},async avatarUrl(){return avatar(myName);}
+  };
+}
+
+/* ---------- AI (opsional, kunci API Claude per perangkat) ---------- */
+function makeSample(){
+  const key=ls.get("htt.aikey");if(!key)return null;
+  const model=ls.get("htt.aimodel")||CFG.aiModel||"claude-sonnet-5";
+  const b64=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(b);});
+  async function call(input,opts){
+    const content=[];const imgs=opts&&opts.images?(Array.isArray(opts.images)?opts.images:Array.from(opts.images.length!=null?opts.images:[opts.images])):[];
+    for(const im of imgs){const t=/^image\/(jpeg|png|webp|gif)$/.test(im.type)?im.type:"image/jpeg";content.push({type:"image",source:{type:"base64",media_type:t,data:await b64(im)}});}
+    content.push({type:"text",text:typeof input==="string"?input:input.map(t=>t.content).join("\n\n")});
+    let r;try{r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model,max_tokens:8000,messages:[{role:"user",content}]})});}
+    catch(e){throw {code:"unavailable",message:"Tidak ada koneksi ke layanan AI"};}
+    if(!r.ok){let m="";try{m=(await r.json()).error.message;}catch(e){}throw {code:r.status===401||r.status===403?"not_granted":r.status===429?"rate_limited":r.status===413||/too long|too large/i.test(m)?"prompt_too_large":"unavailable",message:m||("HTTP "+r.status)};}
+    const j=await r.json();return (j.content||[]).map(c=>c.text||"").join("");
+  }
+  const sample=async(input,opts)=>({text:await call(input,opts),truncated:false});
+  sample.json=async(input,opts)=>{const t=await call(input+"\n\nBalas hanya dengan JSON yang valid, tanpa teks lain.",opts);
+    const s=t.replace(/```(?:json)?/g,"");const a=s.indexOf("{"),b=s.lastIndexOf("}");if(a<0||b<a)throw {code:"unavailable",message:"Jawaban AI tidak berupa JSON"};return JSON.parse(s.slice(a,b+1));};
+  sample.limits=async()=>({maxPromptBytes:120000,images:{maxCount:5,maxInputBytes:5e6,mediaTypes:["image/jpeg","image/png","image/webp","image/gif"]}});
+  return sample;
+}
+
+/* ---------- downloads ---------- */
+const downloads={async save({filename,data}){const blob=data instanceof Blob?data:new Blob([data],{type:/\.csv$/i.test(filename)?"text/csv;charset=utf-8":"application/octet-stream"});
+  const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000);return "saved";}};
+
+/* ---------- lifecycle ---------- */
+let idleTimer=null;
+function armIdle(){clearTimeout(idleTimer);idleTimer=setTimeout(()=>logout("Keluar otomatis setelah "+IDLE_MIN+" menit tidak aktif."),IDLE_MIN*60000);}
+async function logout(note){
+  try{Object.keys(localStorage).filter(k=>k.startsWith("htt.draft")||k==="htt.newdrafts").forEach(k=>localStorage.removeItem(k));}catch(e){}
+  try{await sb.auth.signOut();}catch(e){}
+  if(note)ls.set("htt.logoutnote",note);location.reload();
+}
+async function afterLogin(){
+  const meta=session.user.user_metadata||{};
+  try{await sb.from("docs").upsert({path:"profiles/"+session.user.id,collection:"profiles",data:{name:meta.name||meta.username||"",username:meta.username||""}},{onConflict:"path"});}catch(e){}
+  const caps={db:makeDb(),user:makeUser(),sample:makeSample(),downloads,assets:null};
+  window.claude={use:n=>Promise.resolve(caps[n]===undefined?null:caps[n])};
+  ["pointerdown","keydown","touchstart"].forEach(ev=>document.addEventListener(ev,armIdle,{passive:true}));armIdle();
+  sb.auth.onAuthStateChange(ev=>{if(ev==="SIGNED_OUT")location.reload();});
+  resolveReady();
+}
+async function start(){
+  const c=conf();
+  if(!window.supabase||!window.supabase.createClient){gateHtml(`<div class="eyebrow">Gagal memuat</div><h2>Tidak ada koneksi</h2><p>Komponen database tidak termuat. Periksa internet lalu muat ulang halaman.</p>`);return;}
+  if(!c.url||!c.key){showSetup();return;}
+  try{sb=window.supabase.createClient(c.url,c.key,{auth:{persistSession:true,autoRefreshToken:true,storageKey:"htt.auth"}});}
+  catch(e){ls.del("htt.cfg");showSetup();return;}
+  const {data}=await sb.auth.getSession();session=data&&data.session;
+  const note=ls.get("htt.logoutnote");ls.del("htt.logoutnote");
+  if(session)afterLogin();else showLogin(note);
+}
+window.HTTAuth={ready:()=>{start();return readyP;},logout:()=>logout(),
+  setAiKey(k,m){if(k)ls.set("htt.aikey",k);else ls.del("htt.aikey");if(m)ls.set("htt.aimodel",m);},
+  setModel(m){if(m)ls.set("htt.aimodel",m);},
+  hasAiKey:()=>!!ls.get("htt.aikey"),aiModel:()=>ls.get("htt.aimodel")||CFG.aiModel||"claude-sonnet-5",
+  resetConfig(){ls.del("htt.cfg");location.reload();},configured:()=>!!(CFG.supabaseUrl&&CFG.supabaseAnonKey)};
+})();
+
+</script>
+
+
+<header class="hero">
+  <svg class="ecg" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50 H260 L275 50 L285 38 L295 50 L330 50 L340 58 L352 6 L366 74 L378 50 L420 50 L440 40 L462 50 H760 L775 50 L785 38 L795 50 L830 50 L840 58 L852 6 L866 74 L878 50 L920 50 L940 40 L962 50 H1200" fill="none" stroke="var(--heart)" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
+  <div class="hero-in wrap">
+    <div class="topbar">
+      <div class="brand">
+        <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="rgba(255,255,255,.1)"/><path d="M16 24s-7-4.3-7-9.2A3.8 3.8 0 0116 12a3.8 3.8 0 017 2.8C23 19.7 16 24 16 24z" fill="var(--heart)"/><path d="M7 16h4l1.5-3 2 6 2-8 1.5 5H25" fill="none" stroke="var(--on-brand)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div style="min-width:0"><b>Heart Team Tracker</b><span>Instalasi Diagnostik &amp; Intervensi Kardiologi</span></div>
+      </div>
+      <div class="me" id="meChip" hidden></div>
+    </div>
+    <div class="greet">
+      <div class="eyebrow" id="today"></div>
+      <h1 id="hello">Konferensi Heart Team</h1>
+      <p id="heroSub">Pantau keputusan konferensi, pemeriksaan yang ditunggu, dan jadwal tindakan pasien.</p>
+    </div>
+    <div class="stats" id="summary"></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section id="gate" class="gate">
+    <div class="eyebrow">Memuat</div>
+    <h2>Menyiapkan akses…</h2>
+    <p>Memeriksa akun dan hak akses Anda.</p>
+  </section>
+
+  <main id="app" hidden>
+    <div class="actions">
+      <button class="act primary" id="newBtn"><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="5" width="15" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="10.5" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 5l1.2-2h3.6L13 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span><span><b>Pasien baru</b><small>Foto formulir konferensi, terisi otomatis</small></span></button>
+      <button class="act" id="importBtn"><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2.5h6.5L16 7v10.5H5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 2.5V7h5M10.5 10v5M8 12.5l2.5 2.5 2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>Impor laporan</b><small>PDF, Word, atau foto hasil konferensi</small></span></button>
+      <button class="act" id="reportBtn"><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3.5" width="14" height="13.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 7.5h14M7 2v3M13 2v3M6.5 11h3M6.5 14h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span><b>Laporan &amp; KPI</b><small>PDF/Word per rentang tanggal</small></span></button>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div id="alerts"></div>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <input id="q" type="search" placeholder="Cari nama, No RM, diagnosis, dokter, tindakan…" autocomplete="off">
+      </div>
+      <button class="btn" id="exportBtn" hidden>CSV</button>
+      <button class="btn" id="peopleBtn" hidden>Pengguna</button>
+    </div>
+    <div class="filterline" id="filterLine" hidden></div>
+    <div class="list" id="list"></div>
+    <p class="note">Alat bantu rapat Heart Team, bukan rekam medis resmi · hanya akun yang diundang dan disetujui · setiap perubahan tercatat</p>
+  </main>
+</div>
+
+<button class="btn primary fab" id="fab" hidden>
+  <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  Pasien baru
+</button>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" id="sheet"></div>
+</div>
+<div class="lightbox" id="lightbox" hidden>
+  <div class="lb-bar"><span id="lbCap">Ketuk gambar untuk memperbesar</span><button class="btn small" id="lbClose">Tutup</button></div>
+  <div class="lb-img"><img id="lbImg" alt="Lampiran pemeriksaan"></div>
+</div>
+
+<script id="core">
+(function(g){
+"use strict";
+const STATUS_RANK={pending_konferensi:0,pending_pemeriksaan:1,diputuskan:2,selesai:3,menolak:3,dirujuk:3,meninggal:3,lost:3};
+const CLOSED=["menolak","dirujuk","meninggal","lost"];
+function norm(v){if(v==null)return"";if(Array.isArray(v)&&!v.length)return"";if(typeof v==="boolean")return v?"1":"";if(typeof v==="object")return JSON.stringify(v);return String(v).trim();}
+function rmKey(rm){const s=String(rm||"").trim();if(!s)return"";const d=s.replace(/\D/g,"");return d.length>=4?d:s.toUpperCase().replace(/\s+/g,"");}
+function nameKey(n){return String(n||"").toLowerCase().replace(/^\s*(tn|ny|nn|an|by|sdr|sdri)\.?\s+/,"").replace(/[^a-z0-9]/g,"");}
+function pad2(n){return String(n).padStart(2,"0");}
+function localDay(s){s=String(s||"");if(!s)return"";if(s.length<=10)return s;const d=new Date(s);return isNaN(d)?s.slice(0,10):d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());}
+function normDate(v){v=String(v==null?"":v).trim();if(!v)return"";let m=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return ok(m[1],m[2],m[3]);m=v.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/);if(m)return ok(m[3],m[2],m[1]);return"";
+  function ok(y,mo,d){mo=+mo;d=+d;if(mo<1||mo>12||d<1||d>31)return"";return y+"-"+pad2(mo)+"-"+pad2(d);}}
+function docIdFromRm(rm){const k=rmKey(rm);return k?"rm_"+k.replace(/[^A-Za-z0-9_\-.~:@+]/g,"_").slice(0,150):"";}
+function isoDays(a,b){const A=new Date(a+"T00:00:00"),B=new Date(b+"T00:00:00");if(isNaN(A)||isNaN(B))return null;return Math.round((B-A)/864e5);}
+function trimLog(arr,max){max=max||60;const others=arr.filter(e=>e&&e.k!=="lock").length;let cut=Math.max(0,others-max);return arr.filter(e=>{if(!e)return false;if(e.k==="lock")return true;if(cut>0){cut--;return false;}return true;});}
+function computeSave(o){
+  const base=o.base||{},latest=o.latest||{},cur=o.cur||{};
+  let mine=o.keys.filter(k=>norm(cur[k])!==norm(base[k]));
+  const dropped=[];
+  if(latest.locked&&!o.unlocking){
+    mine=mine.filter(k=>{if(o.lockedKeys.includes(k)){dropped.push(k);return false;}return true;});
+    if(mine.includes("status")&&(STATUS_RANK[cur.status]??0)<2){mine=mine.filter(k=>k!=="status");dropped.push("status");}
+  }
+  const conflicts=mine.filter(k=>norm(latest[k])!==norm(base[k])&&norm(latest[k])!==norm(cur[k]));
+  const patch={};mine.forEach(k=>{patch[k]=cur[k]===undefined?"":cur[k];});
+  return {patch,conflicts,dropped};
+}
+function mergeFiles(lf,uploads,del){
+  lf=lf||{};const out={};const secs=new Set(Object.keys(lf).concat(uploads.map(u=>u.sec)));
+  secs.forEach(s=>{const have=(Array.isArray(lf[s])?lf[s]:[]).filter(r=>!del.has(r.id));const ids=new Set(have.map(r=>r.id));
+    uploads.forEach(u=>{if(u.sec===s&&!del.has(u.ref.id)&&!ids.has(u.ref.id)){have.push(u.ref);ids.add(u.ref.id);}});out[s]=have;});
+  return out;
+}
+function archiveConf(ex){if(!norm(ex.keputusan)&&!norm(ex.kategori))return null;return (Array.isArray(ex.riwayatKonferensi)?ex.riwayatKonferensi:[]).concat([{tgl:ex.tglKonferensi||"",keputusan:ex.keputusan||"",kategori:ex.kategori||"",alasanKode:ex.alasanKode||"",status:ex.status||"",locked:!!ex.locked,lockedBy:ex.lockedBy||"",lockedAt:ex.lockedAt||""}]);}
+function importPatch(ex,row,keys,lockedKeys){
+  const older=!!(ex.tglKonferensi&&row.tglKonferensi&&row.tglKonferensi<ex.tglKonferensi);
+  const newer=!!(ex.tglKonferensi&&row.tglKonferensi&&row.tglKonferensi>ex.tglKonferensi&&(norm(ex.keputusan)||norm(ex.kategori)));
+  const reconfLocked=newer&&!!ex.locked;
+  const patch={},changes=[];
+  keys.forEach(k=>{
+    const v=norm(row[k]);if(!v)return;const cur=norm(ex[k]);if(cur===v)return;if(k==="rm"&&rmKey(v)===rmKey(cur))return;
+    if(ex.locked&&lockedKeys.includes(k))return;
+    if(k==="status"){if(older)return;if(ex.locked&&(STATUS_RANK[v]??0)<2)return;if(!(newer&&!ex.locked)&&(STATUS_RANK[v]??0)<=(STATUS_RANK[ex.status]??0))return;}
+    else if(older&&cur)return;
+    patch[k]=row[k];changes.push([k,ex[k]==null?"":String(ex[k]),String(row[k])]);
+  });
+  if(newer&&!ex.locked&&("tglKonferensi" in patch)){const h=archiveConf(ex);if(h)patch.riwayatKonferensi=h;}
+  return {patch,changes,older,newer,reconfLocked};
+}
+function matchPatient(row,patients){
+  const rk=rmKey(row.rm);
+  if(rk){const m=patients.find(p=>rmKey(p.rm)===rk);if(m)return m;return null;}
+  const nk=nameKey(row.nama);if(!nk||!row.tglKonferensi)return null;
+  return patients.find(p=>nameKey(p.nama)===nk&&p.tglKonferensi===row.tglKonferensi)||null;
+}
+function dedupeRows(rows,keys){
+  const out=[];const idx=new Map();
+  rows.forEach(r=>{const key=rmKey(r.rm)?"rm:"+rmKey(r.rm):(nameKey(r.nama)?"nm:"+nameKey(r.nama)+"|"+(r.tglKonferensi||""):null);
+    if(key&&idx.has(key)){const a=idx.get(key);const laterWins=(r.tglKonferensi||"")>=(a.tglKonferensi||"");
+      const ragu=new Set((a.ragu||[]).concat(r.ragu||[]));const konflik=new Set(a.konflik||[]);
+      keys.forEach(k=>{const nv=norm(r[k]),ov=norm(a[k]);if(!nv)return;if(!ov){a[k]=r[k];return;}if(nv===ov||(k==="rm"&&rmKey(nv)===rmKey(ov)))return;
+        konflik.add(k);ragu.add(k);if(laterWins)a[k]=r[k];});
+      a.ragu=[...ragu];a.konflik=[...konflik];}
+    else{const c=Object.assign({},r);out.push(c);if(key)idx.set(key,c);}});
+  return out;
+}
+function buildLines(items){
+  const its=items.filter(i=>i.s&&i.s.trim()).sort((a,b)=>a.y-b.y||a.x-b.x);
+  const lines=[];let cur=null;
+  its.forEach(i=>{const tol=Math.max(2.5,(i.h||8)*0.45);
+    if(cur&&Math.abs(i.y-cur.y)<=tol){cur.items.push(i);cur.y=(cur.y*(cur.items.length-1)+i.y)/cur.items.length;}
+    else{cur={y:i.y,items:[i]};lines.push(cur);}});
+  return lines.map(l=>{l.items.sort((a,b)=>a.x-b.x);let s="",end=null;l.items.forEach(i=>{if(end!=null){const gap=i.x-end;s+=gap>14?" | ":gap>1?" ":"";}s+=i.s;end=i.x+(i.w||0);});return s;});
+}
+function csvCell(v){v=v===true?"Ya":v===false?"Tidak":String(v??"");if(/^[=+\-@\t\r]/.test(v))v="'"+v;return /[",\n;]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function median(a){const s=a.filter(x=>x!=null&&!isNaN(x)).sort((x,y)=>x-y);if(!s.length)return null;const m=Math.floor(s.length/2);return s.length%2?s[m]:Math.round((s[m-1]+s[m])/2);}
+function stOf(p){return STATUS_RANK[p.status]!=null?p.status:"pending_konferensi";}
+function isPending(p){return stOf(p).startsWith("pending");}
+function isOverdue(p,today){if(!isPending(p))return false;const d=isoDays((p.tglKonferensi||localDay(p.createdAt)),today);return d!=null&&d>30;}
+function isSoon(p,today){if(!p.tglTindakan||stOf(p)==="selesai"||CLOSED.includes(stOf(p)))return false;const d=isoDays(today,p.tglTindakan);return d!=null&&d>=0&&d<=7;}
+function kpis(ps,today){
+  const kt=ps.filter(p=>p.tglKonferensi&&p.tglTindakan&&p.tglTindakan<=today&&!CLOSED.includes(stOf(p))).map(p=>isoDays(p.tglKonferensi,p.tglTindakan)).filter(d=>d!=null&&d>=0);
+  const pend=ps.filter(isPending).map(p=>isoDays(p.tglKonferensi||localDay(p.createdAt),today)).filter(d=>d!=null&&d>=0);
+  return {medianKT:median(kt),nKT:kt.length,overdue:ps.filter(p=>isOverdue(p,today)).length,soon:ps.filter(p=>isSoon(p,today)).length,medianPending:median(pend),
+    unverified:ps.filter(p=>p.status==="diputuskan"&&!p.locked).length};
+}
+function verifyBlockers(p,lockedKeys){
+  const out=[];const pc=Array.isArray(p.perluCek)?p.perluCek.filter(k=>!lockedKeys||lockedKeys.includes(k)):[];
+  if(!norm(p.keputusan))out.push("teks keputusan");
+  if(!norm(p.kategori))out.push("kategori");
+  if(p.kategori==="konservatif"&&!norm(p.alasanKode))out.push("alasan konservatif");
+  if(pc.length)out.push(pc.length+" kolom keputusan/identitas hasil AI belum dicek");
+  if(["sikapIntervensi","sikapOperator","sikapBtkv"].some(k=>p[k]==="tidak_setuju")&&!norm(p.catatanBedaPendapat))out.push("catatan beda pendapat");
+  return out;
+}
+g.HTTCore={STATUS_RANK,CLOSED,localDay,normDate,docIdFromRm,archiveConf,norm,rmKey,nameKey,isoDays,trimLog,computeSave,mergeFiles,importPatch,matchPatient,dedupeRows,buildLines,csvCell,median,stOf,isPending,isOverdue,isSoon,kpis,verifyBlockers};
+})(typeof window!=="undefined"?window:globalThis);
+</script>
+
+<script>
+(function(){
+"use strict";
+const C=window.HTTCore;
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const LOCK_SVG='<svg width="14" height="14" viewBox="0 0 14 14" role="img" aria-label="Terverifikasi" style="flex:none"><rect x="2.5" y="6" width="9" height="6.5" rx="1.5" fill="currentColor"/><path d="M4.5 6V4.3a2.5 2.5 0 015 0V6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+const CHEV='<svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M5 3l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+const LIB={
+  pdf:"https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js",
+  pdfw:"https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js",
+  mammoth:"https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js",
+  jspdf:"https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js",
+  autotable:"https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"
+};
+const loaded={};
+function loadScript(src){return loaded[src]||(loaded[src]=new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=()=>res();s.onerror=()=>{delete loaded[src];rej(new Error("load"));};document.head.appendChild(s);}));}
+
+/* ---------- vocabularies ---------- */
+const STATUS={
+  pending_konferensi:{label:"Menunggu konferensi",short:"Menunggu konferensi",c:"grey"},
+  pending_pemeriksaan:{label:"Menunggu hasil pemeriksaan",short:"Pending pemeriksaan",c:"amber"},
+  diputuskan:{label:"Keputusan final",short:"Keputusan final",c:"blue"},
+  selesai:{label:"Tindakan selesai",short:"Selesai",c:"green"},
+  menolak:{label:"Pasien menolak",short:"Menolak",c:"red"},
+  dirujuk:{label:"Dirujuk ke RS lain",short:"Dirujuk",c:"violet"},
+  meninggal:{label:"Meninggal saat menunggu",short:"Meninggal",c:"red"},
+  lost:{label:"Tidak dapat dihubungi",short:"Lost to follow-up",c:"grey"}
+};
+const KATEGORI={"":"Belum ditetapkan",konservatif:"Konservatif",staging_pci:"Staging PCI",pci:"PCI",cabg:"CABG",hybrid:"Hybrid",tavi:"Katup / TAVI",rujuk:"Rujuk keluar",lainnya:"Lainnya"};
+const ALASAN={"":"Pilih…",tidak_viable:"Miokard tidak viable",target_jelek:"Target distal tidak memadai",frailty:"Frailty / usia lanjut",menolak:"Pasien/keluarga menolak",komorbid:"Komorbid berat",lesi_ringan:"Lesi tidak signifikan",anatomi:"Anatomi kompleks, risiko tinggi",lainnya:"Lainnya"};
+const YESNO={"":"Pilih…",ya:"Ya",tidak:"Tidak"};
+const JK={"":"Pilih…",L:"Laki-laki",P:"Perempuan"};
+const PRESENTASI={"":"Pilih…",stemi:"ACS – STEMI",nstemi:"ACS – NSTEMI",uap:"ACS – UAP",ccs:"Chronic coronary syndrome",hf:"Gagal jantung / iskemik CMP",lainnya:"Lainnya"};
+const VD={"":"Pilih…","1":"1VD","2":"2VD","3":"3VD"};
+const CFS={"":"Pilih…","1":"1 · Sangat bugar","2":"2 · Bugar","3":"3 · Terkelola baik","4":"4 · Sangat ringan","5":"5 · Frail ringan","6":"6 · Frail sedang","7":"7 · Frail berat","8":"8 · Sangat berat","9":"9 · Terminal"};
+const PREF={"":"Pilih…",setuju:"Setuju dengan keputusan",menolak:"Menolak",pikir:"Masih mempertimbangkan"};
+const SIKAP={"":"Pilih…",setuju:"Setuju",tidak_setuju:"Tidak setuju"};
+const RUJUK={"":"Pilih…",menunggu:"Menunggu jawaban",diterima:"Diterima",ditolak:"Ditolak"};
+const EVENT={"":"Pilih…",bebas:"Tanpa kejadian",meninggal:"Meninggal",mi:"Infark miokard",revask:"Revaskularisasi ulang",stroke:"Stroke",rawat:"Rawat ulang",lost:"Tidak terlacak"};
+const ROLES={superadmin:"Pemilik",admin:"Admin koordinator",perawat:"Perawat cath lab",fellow:"Fellow intervensi",residen:"PPDS",admin_poli:"Admin poli",admin_echo:"Admin echocardiography",dokter:"Dokter (verifikator)"};
+const FULL_ROLES=["superadmin","admin","perawat","fellow","residen","dokter"];
+const canFinalize=r=>r==="dokter"||r==="superadmin";
+const canUnlock=r=>r==="superadmin"||r==="dokter";
+const canDelete=r=>r==="superadmin";
+
+/* field specs: [label, opts] */
+const F={
+  nama:["Nama pasien"],rm:["No RM",{num:1}],usia:["Usia <small>tahun</small>",{num:1}],jk:["Jenis kelamin",{sel:JK}],
+  dxMasuk:["Diagnosis masuk",{wide:1}],dxPasca:["Kesimpulan / diagnosis pasca tindakan",{wide:1,ph:"mis. CAD 3VD LM disease"}],
+  presentasi:["Presentasi klinis",{sel:PRESENTASI}],jumlahPembuluh:["Jumlah pembuluh",{sel:VD}],lmDisease:["LM disease",{sel:YESNO}],dm:["Diabetes melitus",{sel:YESNO}],paruKronik:["Penyakit paru kronik",{sel:YESNO}],frailty:["Clinical Frailty Scale",{sel:CFS}],
+  stsScore:["STS score <small>%</small>",{num:1}],euroscore:["EuroSCORE II <small>%</small>",{num:1}],syntax2Pci:["SYNTAX II – PCI <small>% mortalitas 4 th</small>",{num:1}],syntax2Cabg:["SYNTAX II – CABG <small>%</small>",{num:1}],
+  ureum:["Ureum <small>mg/dL</small>",{num:1}],kreatinin:["Kreatinin <small>mg/dL</small>",{num:1}],hba1c:["HbA1C <small>%</small>",{num:1}],gdp:["GD puasa <small>mg/dL</small>",{num:1}],gd2pp:["GD 2 jam PP <small>mg/dL</small>",{num:1}],screening:["Screening (umum)",{ph:"mis. NR"}],hiv:["HIV",{ph:"NR / R"}],hbsag:["HBsAg",{ph:"NR / R"}],
+  ekg:["Interpretasi EKG",{ta:1,wide:1,ph:"mis. SR 78x/m, Q patologis V1–V4"}],
+  echoEf:["EF <small>%</small>",{num:1}],tapse:["TAPSE <small>cm</small>",{num:1}],echoKatup:["Katup",{wide:1,ph:"mis. MR trace, TR trace, AV normal, PR mild"}],echo:["Kesimpulan echo lain",{ta:1,wide:1,ph:"mis. hipokinetik anterior, LVIDd 58 mm"}],
+  tglAngio:["Tanggal angiografi",{date:1}],syntax:["SYNTAX score",{num:1}],angio:["Temuan angiografi",{ta:1,wide:1,ph:"mis. LM 60%, LAD proksimal 90%, RCA mid CTO"}],
+  viability:["Hasil viability / dobutamine stress echo",{ta:1,wide:1,ph:"mis. viable di segmen anterior, respons bifasik"}],
+  ct:["Hasil cardiac CT",{ta:1,wide:1,ph:"mis. CAC score 420, stenosis LAD >70%"}],mri:["Hasil cardiac MRI",{ta:1,wide:1,ph:"mis. LGE <50% transmural di anterior"}],treadmill:["Hasil treadmill",{ta:1,wide:1,ph:"mis. positif iskemia, 7 METs"}],
+  keputusan:["Keputusan hasil conference",{ta:1,wide:1,ph:"mis. CABG di Iskak; jika menolak DSE"}],kategori:["Kategori",{sel:KATEGORI}],alasanKode:["Alasan utama",{sel:ALASAN}],alasanCatatan:["Keterangan alasan",{ph:"opsional"}],
+  tglKonferensi:["Tanggal konferensi",{date:1}],status:["Status",{sel:null}],preferensi:["Sikap pasien / keluarga",{sel:PREF}],tglConsent:["Tanggal informed consent",{date:1}],
+  drIntervensi:["Dokter intervensionis"],drOperator:["Dokter operator"],drBtkv:["Dokter SpBTKV"],
+  sikapIntervensi:["Sikap",{sel:SIKAP}],sikapOperator:["Sikap",{sel:SIKAP}],sikapBtkv:["Sikap",{sel:SIKAP}],catatanBedaPendapat:["Catatan beda pendapat",{ta:1,wide:1,ph:"wajib diisi bila ada yang tidak setuju"}],
+  jenisTindakan:["Jenis tindakan",{ph:"mis. PCI LAD, CABG 3 graft"}],tglTindakan:["Tanggal tindakan",{date:1}],pelaksanaTindakan:["Operator / pelaksana",{ph:"mis. dr. …, SpJP(K)"}],komplikasi:["Komplikasi di rumah sakit",{ph:"mis. tidak ada / perdarahan akses"}],
+  rujukanTujuan:["RS tujuan rujukan"],rujukanDiterima:["Jawaban rujukan",{sel:RUJUK}],tglStatusAkhir:["Tanggal status akhir",{date:1}],keteranganAkhir:["Keterangan status akhir",{ph:"mis. menolak CABG, pilih obat"}],catatan:["Catatan tindak lanjut",{wide:1,ph:"mis. pasien sudah dihubungi"}],
+  fu30Tgl:["Tanggal kontrol 30 hari",{date:1}],fu30Event:["Kejadian 30 hari",{sel:EVENT}],fu30Catatan:["Catatan 30 hari",{wide:1}],
+  fu1yTgl:["Tanggal kontrol 1 tahun",{date:1}],fu1yEvent:["Kejadian 1 tahun",{sel:EVENT}],fu1yCatatan:["Catatan 1 tahun",{wide:1}]
+};
+const SIG=[["Intervensi","drIntervensi","Intervensionis"],["Operator","drOperator","Operator"],["Btkv","drBtkv","SpBTKV"]];
+const TTD=SIG.map(s=>"ttd"+s[0]);const TTD_META=SIG.flatMap(s=>["ttd"+s[0]+"At","ttd"+s[0]+"By","ttd"+s[0]+"Src"]);
+const LAB=["ureum","kreatinin","gdp","gd2pp","hba1c","hiv","hbsag","screening"];
+const RISK=["presentasi","jumlahPembuluh","lmDisease","dm","paruKronik","frailty","stsScore","euroscore","syntax2Pci","syntax2Cabg"];
+const EXAMS=[
+  {key:"ekg",title:"EKG",fields:["ekg"],sum:p=>p.ekg,hint:'"ekg": interpretasi ringkas (irama, laju, aksis, ST-T, Q patologis, blok).'},
+  {key:"echo",title:"Echocardiography",fields:["echoEf","tapse","echoKatup","echo"],sum:p=>[p.echoEf&&("EF "+p.echoEf+"%"),p.tapse&&("TAPSE "+p.tapse),p.echoKatup].filter(Boolean).join(" · "),hint:'"echoEf": angka EF saja; "tapse": angka cm; "echoKatup": ringkas per katup (mis. "MR trace, TR trace, AV normal, PR mild"); "echo": temuan lain.'},
+  {key:"angio",title:"Coronary angiography",fields:["tglAngio","syntax","angio"],sum:p=>[p.syntax&&("SYNTAX "+p.syntax),p.angio].filter(Boolean).join(" · "),hint:'"tglAngio": YYYY-MM-DD; "syntax": angka SYNTAX score; "angio": temuan per pembuluh ringkas.'},
+  {key:"dse",title:"Viability (DSE)",fields:["viability"],sum:p=>p.viability,hint:'"viability": kesimpulan viability/DSE ringkas.'},
+  {key:"ct",title:"Cardiac CT",fields:["ct"],sum:p=>p.ct,hint:'"ct": kesimpulan CT (CAC score, CTCA) ringkas.'},
+  {key:"mri",title:"Cardiac MRI",fields:["mri"],sum:p=>p.mri,hint:'"mri": kesimpulan MRI (LGE, viabilitas, EF) ringkas.'},
+  {key:"treadmill",title:"Treadmill",fields:["treadmill"],sum:p=>p.treadmill,hint:'"treadmill": kesimpulan uji latih ringkas (hasil, METs, Duke score).'}
+];
+const EXAM_FIELDS=EXAMS.flatMap(e=>e.fields);
+const IDENT=["nama","rm","usia","jk","dxMasuk","dxPasca"];
+const DECISION=["keputusan","kategori","alasanKode","alasanCatatan","tglKonferensi","status","preferensi","tglConsent"];
+const VERIF=["drIntervensi","drOperator","drBtkv"].concat(TTD,["sikapIntervensi","sikapOperator","sikapBtkv","catatanBedaPendapat"]);
+const TX=["jenisTindakan","tglTindakan","pelaksanaTindakan","komplikasi"];
+const CLOSEF=["rujukanTujuan","rujukanDiterima","tglStatusAkhir","keteranganAkhir","catatan"];
+const FU=["fu30Tgl","fu30Event","fu30Catatan","fu1yTgl","fu1yEvent","fu1yCatatan"];
+const FIELDS=IDENT.concat(RISK,LAB,EXAM_FIELDS,DECISION,VERIF,TX,CLOSEF,FU);
+const SAVE_KEYS=FIELDS.concat(TTD_META,["perluCek","riwayatKonferensi"]);
+const POLI_EDIT=IDENT.concat(RISK,LAB,EXAM_FIELDS,FU,["catatan"]);
+const ECHO_EDIT=["echoEf","tapse","echoKatup","echo","viability","ct","mri"];
+const PHOTO_SECS={admin_poli:["lab","ekg","echo","angio","dse","ct","mri","treadmill"],admin_echo:["echo","dse","ct","mri"]};
+const isFull=r=>FULL_ROLES.includes(r);
+function canEditField(k){if(isFull(myRole))return true;const base=k.replace(/(At|By|Src)$/,"");if(myRole==="admin_poli")return POLI_EDIT.includes(base);if(myRole==="admin_echo")return ECHO_EDIT.includes(base);return false;}
+const canCreate=r=>isFull(r)||r==="admin_poli";
+const canImport=r=>isFull(r);
+const canPhotoSec=(r,s)=>isFull(r)||(PHOTO_SECS[r]||[]).includes(s);
+const LOCKED=["nama","rm","dxMasuk","dxPasca","keputusan","kategori","alasanKode","alasanCatatan","tglKonferensi","drIntervensi","drOperator","drBtkv","sikapIntervensi","sikapOperator","sikapBtkv","catatanBedaPendapat"].concat(TTD,TTD_META);
+const LABEL={nama:"Nama",rm:"No RM",usia:"Usia",jk:"JK",dxMasuk:"Diagnosis masuk",dxPasca:"Diagnosis pasca tindakan",presentasi:"Presentasi",jumlahPembuluh:"Jumlah pembuluh",lmDisease:"LM",dm:"DM",paruKronik:"Paru kronik",frailty:"CFS",stsScore:"STS",euroscore:"EuroSCORE II",syntax2Pci:"SYNTAX II PCI",syntax2Cabg:"SYNTAX II CABG",ureum:"Ureum",kreatinin:"Kreatinin",gdp:"GDP",gd2pp:"GD2PP",hba1c:"HbA1C",hiv:"HIV",hbsag:"HBsAg",screening:"Screening",ekg:"EKG",echoEf:"EF",tapse:"TAPSE",echoKatup:"Katup",echo:"Echo",tglAngio:"Tgl angiografi",syntax:"SYNTAX",angio:"Angiografi",viability:"Viability/DSE",ct:"Cardiac CT",mri:"Cardiac MRI",treadmill:"Treadmill",keputusan:"Keputusan",kategori:"Kategori",alasanKode:"Alasan",alasanCatatan:"Ket. alasan",tglKonferensi:"Tgl konferensi",status:"Status",preferensi:"Sikap pasien",tglConsent:"Tgl consent",drIntervensi:"Intervensionis",drOperator:"Operator",drBtkv:"SpBTKV",ttdIntervensi:"TTD intervensionis",ttdOperator:"TTD operator",ttdBtkv:"TTD SpBTKV",sikapIntervensi:"Sikap intervensionis",sikapOperator:"Sikap operator",sikapBtkv:"Sikap SpBTKV",catatanBedaPendapat:"Beda pendapat",jenisTindakan:"Jenis tindakan",tglTindakan:"Tgl tindakan",pelaksanaTindakan:"Operator tindakan",komplikasi:"Komplikasi",rujukanTujuan:"RS rujukan",rujukanDiterima:"Jawaban rujukan",tglStatusAkhir:"Tgl status akhir",keteranganAkhir:"Ket. status akhir",catatan:"Catatan",fu30Tgl:"Tgl FU 30 hr",fu30Event:"Kejadian 30 hr",fu30Catatan:"Catatan 30 hr",fu1yTgl:"Tgl FU 1 th",fu1yEvent:"Kejadian 1 th",fu1yCatatan:"Catatan 1 th",perluCek:"Kolom perlu cek"};
+const SELECTS={jk:JK,presentasi:PRESENTASI,jumlahPembuluh:VD,lmDisease:YESNO,dm:YESNO,paruKronik:YESNO,frailty:CFS,kategori:KATEGORI,alasanKode:ALASAN,status:Object.fromEntries(Object.entries(STATUS).map(([k,v])=>[k,v.label])),preferensi:PREF,sikapIntervensi:SIKAP,sikapOperator:SIKAP,sikapBtkv:SIKAP,rujukanDiterima:RUJUK,fu30Event:EVENT,fu1yEvent:EVENT};
+const disp=(k,v)=>SELECTS[k]&&SELECTS[k][v]!=null?SELECTS[k][v]:v;
+
+/* ---------- state ---------- */
+let db=null,user=null,sample=null,downloads=null,assets=null,photoLimits=null;
+let me=null,myRole=null,myExport=false;
+let patients=[],staffDocs=[],requests=[],profiles={};
+let filter="all",query="";
+let unsubPatients=null,unsubReq=null,quotaWarned=false;
+let current=null,isNew=false,prevDoc=null,mode=null,initialSnap="";
+let unsure=new Set(),aiPrev={},sessionBlobs={},sessionUploads=[],pendingDel=new Map(),openSecs=new Set(),dbImgCache={};
+let lastFocus=null,readingSecs=new Set();
+let saving=false,uploading=0,confirmState=null,draftTimer=null,pendingVerify=null,pendingVerifyTimer=null;
+let imp=null,rep=null,newDefaults={};
+
+const store={get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}},del(k){try{localStorage.removeItem(k);}catch(e){}}};
+const validFilter=f=>f==="all"||["verif","overdue","soon","ditutup","cek"].includes(f)||["pending_konferensi","pending_pemeriksaan","diputuskan","selesai","menolak","dirujuk","meninggal","lost"].includes(f);
+{const f=store.get("htt.filter");if(typeof f==="string"&&validFilter(f))filter=f;}
+
+function toast(msg){const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3200);}
+function gate(eyebrow,title,body,extra){const g=$("#gate");g.hidden=false;$("#app").hidden=true;$("#fab").hidden=true;g.innerHTML=`<div class="eyebrow">${esc(eyebrow)}</div><h2>${esc(title)}</h2><p>${body}</p>${extra||""}`;}
+function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function today(){return iso(new Date());}
+function fmtDate(s){if(!s)return"—";const d=new Date(String(s).length<=10?s+"T00:00:00":s);if(isNaN(d))return esc(s);return d.toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"});}
+function fmtLong(s){const d=new Date(s+"T00:00:00");return isNaN(d)?String(s):d.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});}
+function fmtTime(s){const d=new Date(s);return isNaN(d)?"":d.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});}
+function nFiles(p){return Object.values(p.files||{}).reduce((a,b)=>a+(Array.isArray(b)?b.length:0),0);}
+function initials(n){const w=String(n||"?").replace(/^(tn|ny|nn|an|by)\.?\s+/i,"").trim().split(/\s+/);return ((w[0]||"?")[0]+(w[1]?w[1][0]:"")).toUpperCase();}
+const stOf=C.stOf;
+const dayOf=p=>p.tglKonferensi||C.localDay(p.createdAt);
+function dbDocEstimate(){let n=patients.length+staffDocs.length+requests.length;patients.forEach(p=>Object.values(p.files||{}).forEach(a=>(a||[]).forEach(r=>{if(r.store==="db")n+=r.parts||1;})));return n;}
+
+/* ---------- boot ---------- */
+const GREET=(h=>h<11?"Selamat pagi":h<15?"Selamat siang":h<18?"Selamat sore":"Selamat malam")(new Date().getHours());
+$("#today").textContent=new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+const SA=!!window.HTTAuth;
+async function boot(){
+  if(SA){try{await window.HTTAuth.ready();}catch(e){return;}}
+  if(!window.claude||!window.claude.use){gate("Tidak dapat masuk","Buka dari claude.ai","Halaman ini hanya bisa dipakai saat dibuka melalui tautan claude.ai dengan akun yang telah diundang.");return;}
+  [user,db]=await Promise.all([window.claude.use("user"),window.claude.use("db")]);
+  window.claude.use("sample").then(async s=>{sample=s;if(s){try{photoLimits=await s.limits();}catch(e){}}});
+  window.claude.use("downloads").then(d=>{downloads=d;syncExportUi();});
+  window.claude.use("assets").then(a=>{assets=a;});
+  if(!user||!db){gate("Akses ditolak","Akun belum terhubung","Masuk ke claude.ai dengan akun yang diundang pemilik, lalu buka ulang tautan ini.");return;}
+  me=await user.me();
+  if(!me.id){gate("Akses ditolak","Akun belum dikenali","Masuk ke claude.ai dengan akun yang diundang pemilik, lalu buka ulang tautan ini.");return;}
+  $("#meChip").innerHTML=`<img alt="" src="${esc(me.avatarUrl)}"><div style="min-width:0"><div class="nm">${esc(me.name||"Anda")}</div><div class="role" id="roleLbl">…</div></div>`;
+  $("#meChip").hidden=false;
+  if(SA){const mc=$("#meChip");mc.setAttribute("role","button");mc.tabIndex=0;mc.style.cursor="pointer";mc.title="Akun & pengaturan";mc.onclick=openSettings;mc.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openSettings();}};}
+  const firstName=String(me.name||"").replace(/^\s*((dr|drg|prof|ns|mr|mrs)\.?\s+)+/i,"").trim().split(/\s+/)[0]||"";
+  $("#hello").textContent=`${GREET}${firstName?", "+firstName:""}`;
+  const staffRef=db.doc("staff/"+me.id);let first=true;
+  staffRef.onSnapshot(async snap=>{
+    const data=snap.exists?snap.data():null;
+    if(!data&&me.isOwner&&first){first=false;
+      try{await staffRef.set({role:"superadmin",ekspor:true,approvedAt:new Date().toISOString(),approvedBy:me.id});}catch(e){gate("Gagal","Tidak dapat menyiapkan akun pemilik","Muat ulang halaman dan coba lagi.");}
+      return;}
+    first=false;
+    if(data&&ROLES[data.role])enterApp(data);else{leaveApp();showRequest();}
+  },()=>gate("Terputus","Koneksi data terhenti","Muat ulang halaman untuk menyambung lagi."));
+}
+
+async function showRequest(){
+  let req=null;try{const s=await db.doc("requests/"+me.id).get();req=s.exists?s.data():null;}catch(e){}
+  if(req){gate("Menunggu persetujuan","Permintaan akses terkirim",`Anda meminta akses sebagai <b>${esc(ROLES[req.roleAsked]||"Staf")}</b>. Halaman akan terbuka otomatis setelah pemilik menyetujui.`);return;}
+  gate("Akun baru","Minta akses ke data pasien","Pilih peran Anda. Pemilik aplikasi akan memeriksa dan menyetujui sebelum data pasien terlihat.",
+   `<label class="eyebrow" for="roleAsk">Peran</label><select id="roleAsk">${Object.entries(ROLES).filter(([k])=>k!=="superadmin").map(([k,l])=>`<option value="${k}">${l}</option>`).join("")}</select><button class="btn primary" id="reqBtn">Kirim permintaan</button><p id="reqMsg" class="status-line"></p>`);
+  $("#reqBtn").onclick=async()=>{$("#reqBtn").disabled=true;
+    try{await db.doc("requests/"+me.id).set({roleAsked:$("#roleAsk").value,requestedAt:new Date().toISOString()});showRequest();}
+    catch(e){$("#reqMsg").className="status-line err";$("#reqMsg").textContent=SA?"Permintaan tidak terkirim. Periksa koneksi internet lalu coba lagi.":"Permintaan tidak terkirim. Minta pemilik membagikan halaman ini kepada Anda sebagai Contributor atau Editor, lalu coba lagi.";$("#reqBtn").disabled=false;}};
+}
+
+function syncExportUi(){$("#exportBtn").hidden=!(downloads&&myExport);}
+function enterApp(data){
+  myRole=data.role;myExport=data.role==="superadmin"||!!data.ekspor;
+  $("#roleLbl").textContent=ROLES[myRole];
+  $("#gate").hidden=true;$("#app").hidden=false;$("#fab").hidden=!canCreate(myRole);$("#newBtn").hidden=!canCreate(myRole);$("#importBtn").hidden=!canImport(myRole);$("#peopleBtn").hidden=myRole!=="superadmin";syncExportUi();
+  if(!unsubPatients)unsubPatients=db.collection("patients").onSnapshot(s=>{patients=s.docs.map(d=>Object.assign({id:d.id},d.data()));render();if(mode==="report")drawReport();},()=>toast("Koneksi data terhenti. Muat ulang halaman."));
+  if(myRole==="superadmin"&&!unsubReq){
+    unsubReq=db.collection("requests").onSnapshot(s=>{requests=s.docs.map(d=>Object.assign({id:d.id},d.data()));$("#peopleBtn").textContent=requests.length?`Pengguna · ${requests.length} baru`:"Pengguna";if(mode==="people")renderPeople();},()=>{});
+    db.collection("staff").onSnapshot(s=>{staffDocs=s.docs.map(d=>Object.assign({id:d.id},d.data()));if(mode==="people")renderPeople();},()=>{});
+  }
+  render();
+}
+function leaveApp(){
+  const wasIn=!!myRole;myRole=null;if(unsubPatients){unsubPatients();unsubPatients=null;}patients=[];
+  if(wasIn){current=null;confirmState=null;saving=false;if(mode)closeSheet();$("#sheet").innerHTML="";$("#lightbox").hidden=true;$("#lbImg").removeAttribute("src");$("#list").innerHTML="";
+    try{Object.keys(localStorage).filter(k=>k.startsWith("htt.draft")||k==="htt.newdrafts").forEach(k=>localStorage.removeItem(k));}catch(e){}}
+}
+
+async function resolveProfiles(ids){const need=[...new Set(ids)].filter(id=>id&&!(id in profiles));if(!need.length||!user)return;try{Object.assign(profiles,await user.profiles(need));}catch(e){}}
+const pname=id=>id?((profiles[id]&&profiles[id].name)||"Pengguna"):"—";
+
+/* ---------- dashboard ---------- */
+const FILTER_LABEL={verif:"Keputusan belum diverifikasi",overdue:"Pending lebih dari 30 hari",soon:"Tindakan 7 hari ke depan",ditutup:"Status akhir lain (menolak, dirujuk, meninggal, lost)",cek:"Kolom AI belum dicek"};
+function matchesFilter(p){
+  const t=today();
+  switch(filter){case"all":return true;case"verif":return p.status==="diputuskan"&&!p.locked;case"overdue":return C.isOverdue(p,t);case"soon":return C.isSoon(p,t);
+    case"ditutup":return C.CLOSED.includes(stOf(p));case"cek":return Array.isArray(p.perluCek)&&p.perluCek.length>0;default:return stOf(p)===filter;}
+}
+function render(){
+  const t=today();const k=C.kpis(patients,t);
+  const c={all:patients.length,ditutup:0};for(const s in STATUS)c[s]=0;patients.forEach(p=>{c[stOf(p)]++;if(C.CLOSED.includes(stOf(p)))c.ditutup++;});
+  const waiting=c.pending_konferensi+c.pending_pemeriksaan;
+  $("#heroSub").textContent=patients.length?`${waiting} pasien masih menunggu keputusan${k.soon?` · ${k.soon} tindakan dalam 7 hari`:""}${k.overdue?` · ${k.overdue} pending lebih dari 30 hari`:""}.`:"Mulai dengan memotret formulir konferensi atau mengimpor laporan.";
+  const tiles=[["all","Semua pasien",null],["pending_konferensi",STATUS.pending_konferensi.label,"grey"],["pending_pemeriksaan",STATUS.pending_pemeriksaan.label,"amber"],["diputuskan",STATUS.diputuskan.label,"blue"],["selesai",STATUS.selesai.label,"green"],["ditutup","Menolak / dirujuk / lainnya","violet"]];
+  $("#summary").innerHTML=tiles.map(([f,l,col])=>`<button class="stat" data-f="${f}" aria-pressed="${filter===f}"><span class="n">${c[f]||0}</span><span class="l">${col?`<span class="dot" style="background:var(--${col})"></span>`:""}${esc(l)}</span></button>`).join("");
+  $("#summary").querySelectorAll(".stat").forEach(b=>b.onclick=()=>setFilter(filter===b.dataset.f?"all":b.dataset.f));
+  $("#kpis").innerHTML=`
+    <button class="kpi" data-f="soon" aria-pressed="${filter==="soon"}"><span class="v">${k.soon}</span><span class="t">Tindakan dalam 7 hari ke depan</span></button>
+    <button class="kpi" data-f="overdue" aria-pressed="${filter==="overdue"}"><span class="v${k.overdue?" warn":""}">${k.overdue}</span><span class="t">Pending lebih dari 30 hari</span></button>
+    <div class="kpi"><span class="v">${k.medianKT==null?"—":k.medianKT}</span><span class="t">Median hari konferensi → tindakan${k.nKT?` (n=${k.nKT})`:""}</span></div>`;
+  $("#kpis").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>setFilter(filter===b.dataset.f?"all":b.dataset.f));
+  const drafts=listNewDrafts();const nCek=patients.filter(p=>Array.isArray(p.perluCek)&&p.perluCek.length).length;
+  let al="";
+  if(drafts.length)al+=`<button class="alert draft" id="draftBtn"><span class="grow"><b>${drafts.length} draf pasien baru</b> belum disimpan di perangkat ini</span><span>Lanjutkan →</span></button>`;
+  if(canFinalize(myRole)&&k.unverified&&filter!=="verif")al+=`<button class="alert" data-f="verif">${LOCK_SVG}<span class="grow"><b>${k.unverified} keputusan</b> menunggu verifikasi Anda</span><span>Buka antrean →</span></button>`;
+  if(nCek&&filter!=="cek")al+=`<button class="alert draft" data-f="cek"><span class="grow"><b>${nCek} pasien</b> punya kolom hasil AI yang belum dicek</span><span>Lihat →</span></button>`;
+  $("#alerts").innerHTML=al;
+  $("#alerts").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>setFilter(b.dataset.f));
+  if($("#draftBtn"))$("#draftBtn").onclick=()=>{const d=drafts[0];openForm(null,d);};
+  const fl=$("#filterLine");
+  if(FILTER_LABEL[filter]||STATUS[filter]){fl.hidden=false;fl.innerHTML=`Filter: <b>${esc(FILTER_LABEL[filter]||STATUS[filter].label)}</b><button id="clrF">Tampilkan semua</button>`;$("#clrF").onclick=()=>setFilter("all");}else fl.hidden=true;
+
+  const ql=query.trim().toLowerCase();
+  let rows=patients.filter(matchesFilter);
+  if(ql)rows=rows.filter(p=>[p.nama,p.rm,p.dxMasuk,p.dxPasca,p.keputusan,p.drIntervensi,p.drOperator,p.drBtkv,p.jenisTindakan,p.pelaksanaTindakan,p.angio,p.rujukanTujuan].join(" ").toLowerCase().includes(ql));
+  const order={pending_pemeriksaan:0,pending_konferensi:1,diputuskan:2,selesai:3,menolak:4,dirujuk:4,meninggal:4,lost:4};
+  rows.sort((a,b)=>{const oa=order[stOf(a)],ob=order[stOf(b)];if(oa!==ob)return oa-ob;
+    if(filter==="soon")return String(a.tglTindakan).localeCompare(String(b.tglTindakan));
+    return C.isPending(a)?String(dayOf(a)).localeCompare(String(dayOf(b))):String(dayOf(b)).localeCompare(String(dayOf(a)));});
+  const L=$("#list");
+  if(!patients.length){L.innerHTML=`<div class="empty"><b>Belum ada pasien.</b><br>Tekan <b>Pasien baru</b> untuk memotret formulir, atau <b>Impor laporan</b> untuk memasukkan banyak pasien sekaligus dari PDF/Word.</div>`;return;}
+  if(!rows.length){L.innerHTML=`<div class="empty">${filter==="verif"?"Semua keputusan sudah diverifikasi.":"Tidak ada pasien yang cocok dengan filter atau pencarian ini."}</div>`;return;}
+  L.innerHTML=rows.map(p=>card(p,filter==="verif"&&canFinalize(myRole))).join("");
+  L.querySelectorAll(".card").forEach(el=>{const open=()=>openForm(patients.find(p=>p.id===el.dataset.id));el.onclick=e=>{if(e.target.closest("[data-qv],[data-qo]"))return;open();};el.onkeydown=e=>{if((e.key==="Enter"||e.key===" ")&&e.target===el){e.preventDefault();open();}};});
+  L.querySelectorAll("[data-qv]").forEach(b=>b.onclick=e=>{e.stopPropagation();quickVerify(b.dataset.qv);});
+  L.querySelectorAll("[data-qo]").forEach(b=>b.onclick=e=>{e.stopPropagation();openForm(patients.find(p=>p.id===b.dataset.qo));});
+  L.querySelectorAll("img[data-qimg]").forEach(async img=>{const p=patients.find(x=>x.id===img.dataset.qimg);const r=p&&p.files&&p.files.form&&p.files.form[0];if(r&&r.store==="db"){const u=await dbImageUrl(r);if(u)img.src=u;}});
+  if(!SA&&myRole==="superadmin"&&!quotaWarned&&dbDocEstimate()>4000){quotaWarned=true;toast("Database hampir penuh. Buka menu Pengguna untuk detail.");}
+}
+function setFilter(f){if(!validFilter(f))f="all";filter=f;store.set("htt.filter",f);render();window.scrollTo({top:$("#app").offsetTop-10,behavior:"smooth"});}
+function card(p,verifMode){
+  const t=today();const k=stOf(p),st=STATUS[k];const pending=C.isPending(p);
+  const d=pending?C.isoDays(dayOf(p),t):null;const over=C.isOverdue(p,t);
+  const du=p.tglTindakan?C.isoDays(t,p.tglTindakan):null;const nf=nFiles(p);
+  const txWhen=p.tglTindakan&&k!=="selesai"&&!C.CLOSED.includes(k)?(du>0?`${du} hari lagi`:du===0?"hari ini":fmtDate(p.tglTindakan)):"";
+  const metrics=[["EF",p.echoEf&&p.echoEf+"%"],["SYNTAX",p.syntax],["TAPSE",p.tapse],["STS",p.stsScore&&p.stsScore+"%"],["Euro II",p.euroscore&&p.euroscore+"%"]].filter(m=>m[1]);
+  const nCek=Array.isArray(p.perluCek)?p.perluCek.length:0;
+  let vq="";
+  if(verifMode){const bl=C.verifyBlockers(p,LOCKED);const r=p.files&&p.files.form&&p.files.form[0];
+    vq=`<div class="vq">${r?`<span class="ph"><img alt="Foto formulir" ${r.store==="asset"?`src="/_blob/${esc(r.id)}"`:`data-qimg="${esc(p.id)}"`}></span>`:""}
+      ${bl.length?`<span class="why">Lengkapi dulu: ${esc(bl.join(", "))}</span><button class="btn small" data-qo="${esc(p.id)}">Lengkapi</button>`:`<span class="grow sub">Semua syarat terpenuhi.</span><button class="btn small primary" data-qv="${esc(p.id)}">${pendingVerify===p.id?"Ketuk lagi untuk mengunci":LOCK_SVG+" Verifikasi &amp; kunci"}</button>`}</div>`;}
+  return `<div class="card" role="button" tabindex="0" data-id="${esc(p.id)}" style="--c:var(--${st.c})">
+    <div class="c-top"><span class="avatar" style="--c:var(--${st.c});--c-soft:var(--${st.c}-soft)">${esc(initials(p.nama))}</span>
+      <div class="who"><div class="name">${esc(p.nama||"(tanpa nama)")}${p.locked?`<span style="color:var(--blue)">${LOCK_SVG}</span>`:""}</div><div class="sub"><span class="mono">RM ${esc(p.rm||"—")}</span>${p.usia?` · ${esc(p.usia)} th`:""}${p.jk?` ${esc(p.jk)}`:""} · ${fmtDate(p.tglKonferensi)}</div></div>
+      <span class="pill" style="background:var(--${st.c}-soft);color:var(--${st.c})">${esc(st.short)}</span></div>
+    ${p.dxPasca||p.dxMasuk?`<div class="c-dx">${esc(p.dxPasca||p.dxMasuk)}</div>`:""}
+    ${metrics.length?`<div class="metrics">${metrics.map(m=>`<span class="m"><i>${m[0]}</i>${esc(m[1])}</span>`).join("")}</div>`:""}
+    ${p.keputusan?`<div class="c-dec">${p.kategori?`<span class="k">${esc(KATEGORI[p.kategori]||p.kategori)}</span>`:""}<span>${esc(p.keputusan)}${p.alasanKode?` · <i>${esc(ALASAN[p.alasanKode]||"")}</i>`:""}</span></div>`:""}
+    <div class="c-foot"><span class="verif" aria-hidden="true">${TTD.map(x=>`<i class="${p[x]?"on":""}"></i>`).join("")}</span><span>${TTD.filter(x=>p[x]).length}/3 TTD</span>${p.status==="diputuskan"&&!p.locked?`<span style="color:var(--blue)">belum diverifikasi</span>`:""}
+      ${nCek?`<span class="chk">${nCek} kolom perlu cek</span>`:""}
+      ${txWhen?`<span class="tx">${esc(p.jenisTindakan||"Tindakan")} · ${esc(txWhen)}</span>`:""}${k==="dirujuk"&&p.rujukanTujuan?`<span class="tx">→ ${esc(p.rujukanTujuan)}${p.rujukanDiterima?` (${esc(RUJUK[p.rujukanDiterima]||"")})`:""}</span>`:""}<span class="grow"></span>
+      ${nf?`<span>${nf} foto</span>`:""}${d!=null?`<span class="wait${over?" over":""}">${over?"⚠ ":""}${d} hari menunggu</span>`:""}</div>
+    ${vq}
+  </div>`;
+}
+$("#q").addEventListener("input",e=>{query=e.target.value;render();});
+
+async function quickVerify(id){
+  if(pendingVerify!==id){pendingVerify=id;clearTimeout(pendingVerifyTimer);pendingVerifyTimer=setTimeout(()=>{pendingVerify=null;render();},5000);render();return;}
+  pendingVerify=null;clearTimeout(pendingVerifyTimer);
+  try{
+    const ref=db.doc("patients/"+id);const s=await ref.get();if(!s.exists){toast("Data pasien tidak ditemukan.");return;}
+    const d=s.data();if(d.locked){toast("Sudah diverifikasi oleh pengguna lain.");return;}
+    const bl=C.verifyBlockers(d,LOCKED);if(bl.length){toast("Lengkapi dulu: "+bl.join(", "));return;}
+    const now=new Date().toISOString();
+    await ref.update({locked:true,lockedAt:now,lockedBy:me.id,status:(C.STATUS_RANK[d.status]??0)>=2?d.status:"diputuskan",updatedAt:now,updatedBy:me.id,
+      log:C.trimLog((d.log||[]).concat([{at:now,by:me.id,k:"lock",action:"Verifikasi & kunci: "+(KATEGORI[d.kategori]||d.kategori)}]))});
+    toast("Keputusan diverifikasi dan dikunci");
+  }catch(e){toast("Verifikasi gagal. Periksa koneksi lalu coba lagi.");render();}
+}
+
+/* ---------- sheet plumbing ---------- */
+function openSheet(m){if(!mode)lastFocus=document.activeElement;mode=m;$("#overlay").hidden=false;document.body.style.overflow="hidden";setTimeout(()=>{const t=$("#sheetTitle");if(t){t.setAttribute("tabindex","-1");try{t.focus({preventScroll:true});}catch(e){}}},0);}
+function closeSheet(){mode=null;$("#overlay").hidden=true;document.body.style.overflow="";const f=lastFocus;lastFocus=null;if(f&&f.isConnected){try{f.focus({preventScroll:true});}catch(e){}}}
+function focusables(root){return Array.from(root.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]):not(.sr-only),select:not([disabled]),textarea:not([disabled]),summary,label[for],[tabindex]:not([tabindex="-1"])')).filter(el=>el.offsetParent!==null||el.tagName==="SUMMARY");}
+document.addEventListener("keydown",e=>{if(e.key!=="Tab")return;const root=!$("#lightbox").hidden?$("#lightbox"):mode?$("#sheet"):null;if(!root)return;const f=focusables(root);if(!f.length)return;
+  const first=f[0],last=f[f.length-1];if(!root.contains(document.activeElement)){e.preventDefault();first.focus();return;}
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}});
+$("#overlay").addEventListener("click",e=>{if(e.target.id==="overlay"&&(mode==="people"||mode==="report"))closeSheet();});
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(!$("#lightbox").hidden){closeLightbox();return;}
+  if(mode==="form")requestClose();else if(mode==="import"){if(!imp||!imp.busy)closeSheet();}else if(mode)closeSheet();});
+
+/* ---------- images ---------- */
+function loadImage(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file);const i=new Image();i.onload=()=>res(i);i.onerror=()=>{URL.revokeObjectURL(u);rej(new Error("decode"));};i.src=u;});}
+async function compress(file,maxEdge,q){
+  let src,w,h;
+  try{src=await createImageBitmap(file,{imageOrientation:"from-image"});w=src.width;h=src.height;}
+  catch(e){src=await loadImage(file);w=src.naturalWidth;h=src.naturalHeight;}
+  if(!w||!h)throw new Error("decode");
+  const s=Math.min(1,maxEdge/Math.max(w,h));const cw=Math.round(w*s),ch=Math.round(h*s);
+  const cv=document.createElement("canvas");cv.width=cw;cv.height=ch;const cx=cv.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,cw,ch);cx.drawImage(src,0,0,cw,ch);
+  const b=await new Promise(r=>cv.toBlob(r,"image/jpeg",q));if(!b)throw new Error("encode");return b;
+}
+const blobToB64=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(b);});
+const CHUNK=240000;
+async function storeImage(file,pid){
+  if(assets){
+    const blob=await compress(file,2400,0.85);
+    try{const a=await assets.upload(blob,{type:"image/jpeg"});return {blob,ref:{id:a.id,store:"asset",by:me.id,at:new Date().toISOString()}};}
+    catch(e){if(e&&e.code==="quota_or_state")throw {code:"quota"};}
+  }
+  let blob=null,b64="";
+  for(const [edge,q] of [[1400,0.7],[1280,0.6],[1100,0.55],[1000,0.5]]){blob=await compress(file,edge,q);b64=await blobToB64(blob);if(b64.length<=CHUNK)break;}
+  const id=db.collection("images").doc().id;const n=Math.ceil(b64.length/CHUNK);const written=[];
+  try{for(let i=0;i<n;i++){const path="images/"+(i?id+"_"+i:id);await db.doc(path).set({parts:n,idx:i,mime:"image/jpeg",pid,by:me.id,data:b64.slice(i*CHUNK,(i+1)*CHUNK)});written.push(path);}}
+  catch(e){for(const p of written){try{await db.doc(p).delete();}catch(x){}}throw (e&&e.code==="quota_exceeded")?{code:"quota"}:e;}
+  dbImgCache[id]=URL.createObjectURL(blob);
+  return {blob,ref:{id,store:"db",parts:n,by:me.id,at:new Date().toISOString()}};
+}
+async function dbImageUrl(ref){
+  if(dbImgCache[ref.id])return dbImgCache[ref.id];
+  try{let b64="";const n=ref.parts||1;
+    for(let i=0;i<n;i++){const s=await db.doc("images/"+(i?ref.id+"_"+i:ref.id)).get();if(!s.exists)return null;b64+=s.data().data;}
+    const bin=atob(b64);const u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+    return dbImgCache[ref.id]=URL.createObjectURL(new Blob([u8],{type:"image/jpeg"}));}catch(e){return null;}
+}
+async function removeImage(ref){try{if(ref.store==="asset"){if(assets)await assets.delete(ref.id);}else{for(let i=0;i<(ref.parts||1);i++)await db.doc("images/"+(i?ref.id+"_"+i:ref.id)).delete();}}catch(e){}}
+function allRefs(){const out={};Object.entries(current?.files||{}).forEach(([s,a])=>{out[s]=(a||[]).slice();});sessionUploads.forEach(u=>{(out[u.sec]=out[u.sec]||[]);if(!out[u.sec].some(r=>r.id===u.ref.id))out[u.sec].push(u.ref);});
+  Object.keys(out).forEach(s=>{out[s]=out[s].filter(r=>!pendingDel.has(r.id));});return out;}
+function findRef(id){for(const arr of Object.values(allRefs()))for(const r of arr)if(r.id===id)return r;return null;}
+async function blobsFor(sec){
+  if(sessionBlobs[sec]&&sessionBlobs[sec].length)return sessionBlobs[sec];
+  const out=[];for(const r of (allRefs()[sec]||[])){try{const url=r.store==="asset"?"/_blob/"+r.id:await dbImageUrl(r);if(url)out.push(await (await fetch(url)).blob());}catch(e){}}
+  return out;
+}
+function hydrateThumbs(){document.querySelectorAll("#sheet img[data-dbimg]").forEach(async img=>{const r=findRef(img.dataset.dbimg);if(!r)return;const u=await dbImageUrl(r);if(u&&img.isConnected)img.src=u;});}
+
+/* ---------- drafts ---------- */
+const draftKey=id=>"htt.draft."+id;
+function listNewDrafts(){const idx=store.get("htt.newdrafts")||[];return idx.map(id=>store.get(draftKey(id))).filter(d=>d&&d.data&&d.isNew&&!patients.some(p=>p.id===d.data.id));}
+function writeDraft(){if(!current)return;collect();
+  const data={id:current.id};SAVE_KEYS.forEach(k=>{if(current[k]!==undefined)data[k]=current[k];});
+  const d={at:new Date().toISOString(),isNew,data,base:isNew?null:prevDoc,unsure:[...unsure],uploads:sessionUploads.slice(),del:[...pendingDel.values()]};
+  store.set(draftKey(current.id),d);
+  if(isNew){let idx=store.get("htt.newdrafts")||[];if(!idx.includes(current.id)){idx.push(current.id);while(idx.length>10){const old=idx.shift();discardDraft(old,[]);}store.set("htt.newdrafts",idx);}}}
+function discardDraft(id,keepIds){const d=store.get(draftKey(id));if(d&&Array.isArray(d.uploads)){const keep=new Set(keepIds||[]);d.uploads.forEach(u=>{if(u&&u.ref&&!keep.has(u.ref.id))removeImage(u.ref);});}clearDraft(id);}
+function fileIds(files){return Object.values(files||{}).flat().map(r=>r&&r.id).filter(Boolean);}
+function scheduleDraft(){clearTimeout(draftTimer);draftTimer=setTimeout(()=>{if(mode!=="form"||!current)return;if(dirty())writeDraft();else if(!current._draftBanner)clearDraft(current.id);},700);}
+function clearDraft(id){store.del(draftKey(id));const idx=(store.get("htt.newdrafts")||[]).filter(x=>x!==id);store.set("htt.newdrafts",idx);}
+
+/* ---------- patient form ---------- */
+function snapOf(o){const s={};SAVE_KEYS.forEach(k=>{s[k]=C.norm(o[k]);});return JSON.stringify(s);}
+function dirty(){if(!current)return false;return snapOf(current)!==initialSnap||sessionUploads.length>0||pendingDel.size>0;}
+function isLockedField(k){return (!!current.locked&&LOCKED.includes(k))||!canEditField(k);}
+function field(k,extra){
+  const spec=F[k]||[k];const label=spec[0];const o=Object.assign({},spec[1]||{},extra||{});
+  const v=current[k]??"";const dis=isLockedField(k)?" disabled":"";
+  const cls="f"+(o.wide?" wide":"")+(unsure.has(k)?" unsure":"");
+  let input;
+  if(o.ta)input=`<textarea id="f_${k}" data-k="${k}"${dis}${o.ph?` placeholder="${esc(o.ph)}"`:""}>${esc(v)}</textarea>`;
+  else if(o.sel||o.options){const opts=o.options||o.sel;input=`<select id="f_${k}" data-k="${k}"${dis}>${Object.entries(opts).map(([ov,ol])=>`<option value="${esc(ov)}"${String(ov)===String(v)?" selected":""}>${esc(ol)}</option>`).join("")}${v&&!(v in opts)?`<option value="${esc(v)}" selected>${esc(v)}</option>`:""}</select>`;}
+  else input=`<input id="f_${k}" data-k="${k}" type="${o.date?"date":"text"}" value="${esc(v)}"${dis}${o.num?' class="num" inputmode="decimal"':""}${o.ph?` placeholder="${esc(o.ph)}"`:""}>`;
+  const prev=k in aiPrev&&C.norm(aiPrev[k])!==C.norm(v)?`<span class="prev">sebelumnya: ${esc(disp(k,aiPrev[k])||"(kosong)")}<button type="button" data-restore="${k}">kembalikan</button></span>`:"";
+  return `<div class="${cls}"><label for="f_${k}">${label}</label>${input}${prev}</div>`;
+}
+function canDelImg(r,sec){if(sec==="form"&&current.locked)return false;if(!canPhotoSec(myRole,sec))return false;return myRole==="superadmin"||myRole==="admin"||r.by===me.id;}
+function attBlock(sec,opts={}){
+  const arr=allRefs()[sec]||[];
+  const canRead=!!(photoLimits&&photoLimits.images)&&!(sec==="form"&&current.locked)&&canPhotoSec(myRole,sec);
+  const canAdd=!(sec==="form"&&current.locked)&&canPhotoSec(myRole,sec);
+  return `<div class="att${opts.hero?" hero-att":""}" data-sec="${sec}">
+    ${opts.intro?`<div class="status-line" style="color:var(--ink)">${opts.intro}</div>`:""}
+    ${arr.length?`<div class="thumbs">${arr.map(r=>`<div class="th"><button type="button" class="thimg" data-view="${esc(r.id)}" aria-label="Lihat foto"><img alt="" ${r.store==="asset"?`src="/_blob/${esc(r.id)}"`:`data-dbimg="${esc(r.id)}"${dbImgCache[r.id]?` src="${dbImgCache[r.id]}"`:""}`}></button>${canDelImg(r,sec)?`<button type="button" class="thx" data-del="${sec}|${esc(r.id)}" aria-label="Hapus foto">×</button>`:""}</div>`).join("")}</div>`:""}
+    <div class="bar">${canAdd?`<input type="file" accept="image/*" multiple class="sr-only" id="up_${sec}" data-up="${sec}"><label for="up_${sec}" class="btn small${opts.hero?" primary":""}">+ Foto / galeri</label>`:""}
+    ${canRead&&arr.length?`<button type="button" class="btn small" data-read="${sec}"${readingSecs.has(sec)?" disabled":""}>${readingSecs.has(sec)?"Membaca…":(opts.readLabel||"Isi dari foto")}</button>`:""}
+    <span class="status-line" id="msg_${sec}" role="status">${readingSecs.has(sec)?"Membaca foto… (10–40 detik)":""}</span></div>
+  </div>`;
+}
+function sec(key,title,summary,inner,cls){return `<details class="sec${cls?" "+cls:""}" data-sec-key="${key}"${openSecs.has(key)?" open":""}><summary>${CHEV}<span class="t">${esc(title)}</span><span class="s">${esc(summary||"Belum ada data")}</span></summary><div class="inner">${inner}</div></details>`;}
+
+async function openForm(p,draft){
+  if(mode==="form")return;
+  isNew=!p;prevDoc=p?JSON.parse(JSON.stringify(p)):null;
+  current=p?JSON.parse(JSON.stringify(p)):{id:db.collection("patients").doc().id,status:"pending_konferensi",kategori:"",tglKonferensi:canEditField("tglKonferensi")?today():"",files:{}};
+  current.files=current.files||{};
+  newDefaults=p?{}:{tglKonferensi:current.tglKonferensi,status:current.status};
+  readingSecs=new Set();unsure=new Set(Array.isArray(current.perluCek)?current.perluCek:[]);aiPrev={};sessionBlobs={};sessionUploads=[];pendingDel=new Map();confirmState=null;saving=false;
+  initialSnap=snapOf(current);
+  let draftBanner=null;
+  if(draft){await applyDraft(draft);}
+  else{const d=store.get(draftKey(current.id));if(d&&d.data){if(!p||String(d.at)>String(p.updatedAt||""))draftBanner=d;else discardDraft(current.id,fileIds(p&&p.files));}}
+  openSecs=new Set(["_"]);
+  EXAMS.forEach(e=>{if(e.fields.some(f=>C.norm(current[f]))||(current.files[e.key]||[]).length)openSecs.add(e.key);});
+  if(p)await resolveProfiles([p.createdBy,p.updatedBy,p.lockedBy].concat((p.log||[]).map(l=>l.by),TTD.map(t=>p[t+"By"])));
+  openSheet("form");current._draftBanner=draftBanner;drawForm();$("#sheet").scrollTop=0;
+}
+async function applyDraft(d){
+  isNew=!!d.isNew;const data=d.data||{};SAVE_KEYS.forEach(k=>{if(k in data)current[k]=data[k];});
+  if(isNew){current.id=data.id||current.id;current.files=current.files||{};}
+  else if(d.base)prevDoc=d.base;
+  unsure=new Set(d.unsure||[]);
+  const ups=[];for(const u of (Array.isArray(d.uploads)?d.uploads:[])){if(!u||!u.ref)continue;if(u.ref.store==="db"){try{const s=await db.doc("images/"+u.ref.id).get();if(!s.exists)continue;}catch(e){continue;}}ups.push(u);}
+  sessionUploads=ups;const known=new Set(fileIds(current.files));pendingDel=new Map((d.del||[]).filter(r=>r&&known.has(r.id)).map(r=>[r.id,r]));
+}
+function requestClose(){
+  if(saving||uploading){toast(uploading?"Tunggu unggahan foto selesai.":"Sedang menyimpan…");return;}
+  collect();
+  if(!dirty()){if(!current._draftBanner)clearDraft(current.id);finishClose(false);return;}
+  confirmState="discard";drawFoot();
+}
+function finishClose(discard){
+  if(discard){const ups=sessionUploads.slice();sessionUploads=[];ups.forEach(u=>removeImage(u.ref));clearDraft(current.id);}
+  current=null;confirmState=null;closeSheet();render();
+}
+function collect(){
+  if(!current)return;
+  $("#sheet").querySelectorAll("[data-k]").forEach(el=>{if(el.matches(":disabled"))return;const k=el.dataset.k;
+    if(el.type==="checkbox"){const was=!!current[k];current[k]=el.checked;if(TTD.includes(k)){if(el.checked&&!was){current[k+"At"]=new Date().toISOString();current[k+"By"]=me.id;current[k+"Src"]="";}else if(!el.checked){current[k+"At"]="";current[k+"By"]="";current[k+"Src"]="";}}}
+    else current[k]=el.value.trim();});
+  document.querySelectorAll("#sheet details.sec").forEach(d=>{d.open?openSecs.add(d.dataset.secKey):openSecs.delete(d.dataset.secKey);});
+  current.perluCek=[...unsure];
+}
+function statusOptions(){
+  const o={};Object.entries(STATUS).forEach(([k,v])=>{if(current.locked&&(C.STATUS_RANK[k]??0)<2)return;o[k]=k==="diputuskan"&&!current.locked?v.label+" (belum diverifikasi)":v.label;});return o;
+}
+function sumOf(keys){return keys.map(k=>C.norm(current[k])?(SELECTS[k]?disp(k,current[k]):current[k]):"").filter(Boolean).join(" · ");}
+
+function drawForm(msgs){
+  if(!current)return;
+  const locked=!!current.locked;const t=today();
+  const dup=current.rm?patients.find(p=>p.id!==current.id&&C.rmKey(p.rm)===C.rmKey(current.rm)):null;
+  const sOpts=statusOptions();if(!sOpts[current.status])current.status=locked?"diputuskan":"pending_konferensi";
+  const scroll=$("#sheet").scrollTop;
+  const signers=SIG.map(([s,nk,lab])=>{const tk="ttd"+s;const meta=current[tk]&&current[tk+"At"]?`<span class="sigmeta">✓ ${current[tk+"Src"]==="foto"?"terbaca dari foto · diunggah":"ditandai"} ${esc(pname(current[tk+"By"]))} · ${fmtDate(current[tk+"At"])}</span>`:"";
+    return `<div class="who3">${field(nk)}${field("sikap"+s)}<div class="f"><label class="check"><input type="checkbox" id="f_${tk}" data-k="${tk}"${current[tk]?" checked":""}${isLockedField(tk)?" disabled":""}> Tanda tangan</label>${meta}</div></div>`;}).join("");
+  const nSig=TTD.filter(k=>current[k]).length;
+  const closedStatus=C.CLOSED.includes(current.status);
+  const blockers=C.verifyBlockers(Object.assign({},current,{perluCek:[...unsure]}),LOCKED);
+  $("#sheet").innerHTML=`
+  <div class="sheet-head"><h2 id="sheetTitle">${isNew?"Pasien baru":esc(current.nama||"Data pasien")}${locked?`<span style="color:var(--blue)">${LOCK_SVG}</span>`:""}</h2><button class="btn ghost" id="closeBtn">Tutup</button></div>
+  <div class="sheet-body">
+    ${current._draftBanner?`<div class="banner warn"><span class="grow">Ada draf belum disimpan dari ${fmtDate(current._draftBanner.at)} ${fmtTime(current._draftBanner.at)} di perangkat ini.</span><button class="btn small" id="draftUse">Pulihkan</button><button class="btn small" id="draftDrop">Buang draf</button></div>`:""}
+    <div id="conflictZone"></div>
+    ${!isFull(myRole)?`<div class="banner lock"><span class="grow">Peran Anda: <b>${esc(ROLES[myRole]||"")}</b>. ${myRole==="admin_echo"?"Anda dapat mengisi echocardiography, DSE, cardiac CT, dan cardiac MRI.":"Anda dapat menambah identitas, data penunjang, lab, dan follow-up."} Kolom lain hanya bisa dibaca.</span></div>`:""}
+    ${attBlock("form",{hero:true,readLabel:"Baca otomatis",intro:locked?"<b>Foto formulir konferensi</b> · terkunci bersama keputusan.":"<b>Foto formulir konferensi.</b> Ambil dari kamera atau galeri; kolom terisi otomatis."})}
+    ${unsure.size?`<div class="banner warn"><span class="grow"><b>${unsure.size} kolom dari AI perlu dicek.</b> Ketuk nama kolom untuk melompat, ✓ bila sudah benar.</span><span class="chips">${[...unsure].map(k=>`<span class="ucheck"><button type="button" data-jump="${k}">${esc(LABEL[k]||k)}</button><button type="button" data-ok="${k}" aria-label="Tandai ${esc(LABEL[k]||k)} sudah benar">✓</button></span>`).join("")}</span><button class="btn small" id="okAll">Semua sudah dicek</button></div>`:""}
+    <div id="dupZone">${dupHtml(dup)}</div>
+    ${locked?`<div class="banner lock"><span class="grow">${LOCK_SVG} Diverifikasi <b>${esc(pname(current.lockedBy))}</b> pada ${fmtDate(current.lockedAt)}. Identitas, keputusan, dan verifikator terkunci. Data penunjang, lab, tindakan, dan follow-up tetap bisa dilengkapi.</span>${canUnlock(myRole)?`<button class="btn small" id="unlockBtn">Buka kunci</button>`:""}</div><div id="unlockZone"></div>`:""}
+
+    <fieldset><legend>Identitas</legend>
+      ${field("nama")}${field("rm")}${field("usia")}${field("jk")}${field("dxMasuk")}${field("dxPasca")}
+    </fieldset>
+
+    <fieldset><legend>Keputusan konferensi</legend>
+      ${field("keputusan")}${field("kategori")}${field("tglKonferensi")}
+      ${field("alasanKode")}${field("alasanCatatan")}
+      ${field("status",{options:sOpts})}${field("preferensi")}${field("tglConsent")}
+      <div class="f" style="justify-content:flex-end">${!locked&&canFinalize(myRole)?`<button type="button" class="btn primary" id="finalBtn">${LOCK_SVG} Verifikasi &amp; kunci</button>`:!locked?`<span class="status-line">Dikunci oleh dokter verifikator.</span>`:""}</div>
+      <div class="span" id="finalZone"></div>
+      ${Array.isArray(current.riwayatKonferensi)&&current.riwayatKonferensi.length?`<div class="hist"><b style="color:var(--ink)">Konferensi sebelumnya</b>${current.riwayatKonferensi.slice().reverse().map(h=>`<span>${fmtDate(h.tgl)} · ${esc(KATEGORI[h.kategori]||h.kategori||"—")} · ${esc(h.keputusan||"")}${h.locked?" · terverifikasi":""}</span>`).join("")}</div>`:""}
+    </fieldset>
+
+    ${sec("verif","Verifikator",`${nSig}/3 tanda tangan${["sikapIntervensi","sikapOperator","sikapBtkv"].some(k=>current[k]==="tidak_setuju")?" · ada beda pendapat":""}`,signers+field("catatanBedaPendapat"))}
+    ${sec("tx",closedStatus?"Status akhir & tindakan":"Tindakan & status akhir",sumOf(["jenisTindakan","tglTindakan","pelaksanaTindakan","rujukanTujuan"])||(closedStatus?STATUS[current.status].label:""),TX.map(k=>field(k)).join("")+`<div class="span group-title" style="margin:6px 0 0">Bila dirujuk, menolak, meninggal, atau lost</div>`+CLOSEF.map(k=>field(k)).join(""))}
+    ${sec("risk","Profil & skor risiko",sumOf(["presentasi","jumlahPembuluh","stsScore","euroscore"]),RISK.map(k=>field(k)).join(""))}
+    ${sec("lab","Laboratorium",sumOf(["ureum","kreatinin","hba1c"])+(((allRefs().lab||[]).length)?` · ${(allRefs().lab||[]).length} foto`:""),LAB.map(k=>field(k)).join("")+attBlock("lab",{readLabel:"Isi lab dari foto"}),"three")}
+    <div class="group-title">Pemeriksaan penunjang</div>
+    ${EXAMS.map(e=>{const nf=(allRefs()[e.key]||[]).length;return sec(e.key,e.title,(e.sum(current)||"")+(nf?` · ${nf} foto`:""),e.fields.map(k=>field(k)).join("")+attBlock(e.key));}).join("")}
+    ${sec("fu","Follow-up & MACE",sumOf(["komplikasi","fu30Event","fu1yEvent"]),FU.map(k=>field(k)).join(""))}
+    ${!isNew?sec("log","Riwayat perubahan",`${(current.log||[]).length} catatan`,`<ul class="log span">${(current.log||[]).slice().reverse().map(l=>`<li${l.k==="lock"?' class="lk"':""}>${fmtDate(l.at)} ${fmtTime(l.at)} · ${esc(pname(l.by))} · ${esc(l.action)}</li>`).join("")||"<li>—</li>"}</ul>`):""}
+    <div id="delZone"></div>
+  </div>
+  <div class="sheet-foot" id="foot"></div>`;
+  drawFoot();
+  $("#sheet").scrollTop=scroll;
+  if(msgs)Object.entries(msgs).forEach(([s,m])=>{const el=$("#msg_"+s);if(el){el.className="status-line "+(m.cls||"");el.textContent=m.text;}});
+  hydrateThumbs();bindForm(dup,blockers);
+}
+function drawFoot(){
+  const f=$("#foot");if(!f||!current)return;
+  let top="";
+  if(confirmState==="discard")top=`<div class="confirm"><span class="grow">Perubahan belum disimpan. Buang semua perubahan${sessionUploads.length?` dan ${sessionUploads.length} foto baru`:""}?</span><button class="btn small danger" id="discardYes">Buang</button><button class="btn small" id="discardNo">Kembali</button></div>`;
+  else if(confirmState==="unsure")top=`<div class="confirm soft"><span class="grow">${unsure.size} kolom dari AI belum dicek. Simpan dengan tanda "perlu cek"?</span><button class="btn small" id="unsureSave">Simpan</button><button class="btn small" id="unsureBack">Cek dulu</button></div>`;
+  f.innerHTML=`${top}<div class="foot-row">${!isNew&&canDelete(myRole)?`<button class="btn danger" id="delBtn">Hapus</button>`:""}<span class="spacer"></span>
+    <button class="btn" id="cancelBtn">Batal</button><button class="btn primary" id="saveBtn">${saving?"Menyimpan…":isNew?"Simpan pasien":"Simpan perubahan"}${unsure.size&&!saving?` · ${unsure.size} perlu cek`:""}</button></div>`;
+  $("#cancelBtn").onclick=requestClose;$("#saveBtn").onclick=()=>save();
+  if(saving){$("#saveBtn").disabled=true;$("#cancelBtn").disabled=true;}
+  if($("#discardYes")){$("#discardYes").onclick=()=>finishClose(true);$("#discardNo").onclick=()=>{confirmState=null;drawFoot();};}
+  if($("#unsureSave")){$("#unsureSave").onclick=()=>{confirmState=null;save({skipUnsure:true});};$("#unsureBack").onclick=()=>{confirmState=null;drawFoot();jumpTo([...unsure][0]);};}
+  if($("#delBtn"))$("#delBtn").onclick=()=>{
+    $("#delZone").innerHTML=`<div class="confirm">Hapus data ${esc(current.nama||"pasien ini")} beserta semua fotonya secara permanen? <button class="btn danger small" id="delYes">Ya, hapus</button><button class="btn small" id="delNo">Batal</button></div>`;
+    $("#delNo").onclick=()=>$("#delZone").innerHTML="";
+    $("#delYes").onclick=async()=>{if(saving)return;saving=true;try{const s=await db.doc("patients/"+current.id).get();const refs=Object.values((s.exists?s.data().files:current.files)||{}).flat().concat(sessionUploads.map(u=>u.ref));await db.doc("patients/"+current.id).delete();refs.forEach(removeImage);sessionUploads=[];clearDraft(current.id);saving=false;toast("Data pasien dihapus");finishClose(false);}catch(e){saving=false;toast("Gagal menghapus. Coba lagi.");}};
+  };
+}
+function dupHtml(dup){return dup?`<div class="banner warn"><span class="grow">No RM ${esc(current.rm)} sudah terdaftar atas nama ${esc(dup.nama||"—")}.</span><button class="btn small" id="openDup">Buka data itu</button></div>`:"";}
+function bindDup(dup){const b=$("#openDup");if(b)b.onclick=()=>{collect();if(dirty()){toast("Simpan atau batalkan perubahan dulu.");return;}finishClose(false);openForm(dup);};}
+function updateDup(){if(!current)return;const el=$("#f_rm");if(!el||el.matches(":disabled"))return;const rm=el.value.trim();
+  const dup=rm?patients.find(p=>p.id!==current.id&&C.rmKey(p.rm)===C.rmKey(rm)):null;const z=$("#dupZone");if(!z)return;
+  const cur=current.rm;current.rm=rm;z.innerHTML=dupHtml(dup);current.rm=cur;bindDup(dup);}
+function jumpTo(k){const el=$("#f_"+k);if(!el)return;const d=el.closest("details");if(d)d.open=true;el.scrollIntoView({block:"center",behavior:"smooth"});setTimeout(()=>{try{el.focus({preventScroll:true});}catch(e){}},300);}
+function bindForm(dup,blockers){
+  $("#closeBtn").onclick=requestClose;
+  bindDup(dup);
+  if($("#draftUse"))$("#draftUse").onclick=async()=>{const d=current._draftBanner;current._draftBanner=null;await applyDraft(d);if(!current)return;drawForm();toast("Draf dipulihkan. Tekan Simpan untuk menyimpan.");};
+  if($("#draftDrop"))$("#draftDrop").onclick=()=>{collect();current._draftBanner=null;discardDraft(current.id,fileIds(current.files));drawForm();};
+  const rm=$("#f_rm");if(rm&&!rm.matches(":disabled")){let t=null;rm.addEventListener("input",()=>{clearTimeout(t);t=setTimeout(updateDup,300);});rm.addEventListener("change",updateDup);}
+  const st=$("#f_status");if(st)st.addEventListener("change",()=>{collect();if(C.CLOSED.includes(current.status))openSecs.add("tx");drawForm();});
+  $("#sheet").querySelectorAll("[data-k]").forEach(el=>{el.addEventListener("input",()=>{if(unsure.delete(el.dataset.k)){el.closest(".f")?.classList.remove("unsure");current.perluCek=[...unsure];}scheduleDraft();});el.addEventListener("change",scheduleDraft);});
+  $("#sheet").querySelectorAll("[data-jump]").forEach(b=>b.onclick=()=>jumpTo(b.dataset.jump));
+  $("#sheet").querySelectorAll("[data-ok]").forEach(b=>b.onclick=()=>{collect();unsure.delete(b.dataset.ok);current.perluCek=[...unsure];scheduleDraft();drawForm();});
+  if($("#okAll"))$("#okAll").onclick=()=>{collect();unsure.clear();current.perluCek=[];scheduleDraft();drawForm();};
+  $("#sheet").querySelectorAll("[data-restore]").forEach(b=>b.onclick=()=>{collect();const k=b.dataset.restore;current[k]=aiPrev[k];delete aiPrev[k];unsure.delete(k);current.perluCek=[...unsure];drawForm();});
+  $("#sheet").querySelectorAll("[data-up]").forEach(inp=>inp.onchange=e=>{const files=Array.from(e.target.files);e.target.value="";addPhotos(inp.dataset.up,files);});
+  $("#sheet").querySelectorAll("[data-read]").forEach(b=>b.onclick=()=>readSection(b.dataset.read,b));
+  $("#sheet").querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>viewImage(b.dataset.view));
+  $("#sheet").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{const [s,id]=b.dataset.del.split("|");collect();const r=findRef(id);if(!r)return;
+    const up=sessionUploads.findIndex(u=>u.ref.id===id);if(up>=0){sessionUploads.splice(up,1);removeImage(r);if(sessionBlobs[s])sessionBlobs[s]=[];}else pendingDel.set(id,r);
+    scheduleDraft();drawForm({[s]:{text:up>=0?"Foto dihapus.":"Foto dihapus saat disimpan."}});});
+  if($("#finalBtn"))$("#finalBtn").onclick=()=>{collect();
+    const bl=C.verifyBlockers(Object.assign({},current,{perluCek:[...unsure]}),LOCKED);
+    if(bl.length){$("#finalZone").innerHTML=`<div class="banner warn">Lengkapi dulu sebelum diverifikasi: ${esc(bl.join(", "))}.</div>`;return;}
+    $("#finalZone").innerHTML=`<div class="banner lock"><span class="grow">Verifikasi keputusan <b>${esc(KATEGORI[current.kategori])}</b>? Setelah dikunci, keputusan, identitas, dan verifikator tidak bisa diubah lagi.</span><button class="btn small primary" id="finalYes">Ya, kunci</button><button class="btn small" id="finalNo">Batal</button></div>`;
+    $("#finalNo").onclick=()=>$("#finalZone").innerHTML="";
+    $("#finalYes").onclick=()=>{collect();save({lock:true,action:"Verifikasi & kunci: "+KATEGORI[current.kategori]});};
+  };
+  if($("#unlockBtn"))$("#unlockBtn").onclick=()=>{
+    $("#unlockZone").innerHTML=`<div class="banner warn"><input id="unlockReason" placeholder="Alasan membuka kunci (wajib)"><button class="btn small" id="unlockYes">Buka kunci</button></div>`;
+    $("#unlockYes").onclick=()=>{const r=$("#unlockReason").value.trim();if(!r){$("#unlockReason").focus();return;}collect();save({unlock:true,action:"Buka kunci keputusan: "+r});};
+  };
+}
+
+async function addPhotos(sec,files){
+  if(!files.length||!current)return;collect();
+  const target=current;const msg=$("#msg_"+sec);let done=0,fail=0,quota=false;
+  uploading++;
+  for(const f of files){
+    if(msg&&msg.isConnected){msg.className="status-line";msg.textContent=`Mengunggah ${done+fail+1}/${files.length}…`;}
+    try{const {blob,ref}=await storeImage(f,target.id);
+      if(current!==target){removeImage(ref);continue;}
+      sessionUploads.push({sec,ref});(sessionBlobs[sec]=sessionBlobs[sec]||[]).push(blob);done++;}
+    catch(e){fail++;if(e&&e.code==="quota")quota=true;}
+  }
+  uploading--;
+  if(current!==target)return;
+  collect();openSecs.add(sec);scheduleDraft();
+  const auto=sec==="form"&&photoLimits&&photoLimits.images&&done;
+  drawForm({[sec]:{cls:fail?"err":"ok",text:quota?"Penyimpanan foto penuh. Hubungi pemilik aplikasi.":fail?`${fail} foto gagal (format tidak didukung atau koneksi terputus). Coba foto JPG/PNG lain.`:`${done} foto ditambahkan.${auto?"":" Tersimpan saat Anda menekan Simpan."}`}});
+  if(auto){const b=document.querySelector('[data-read="form"]');if(b)readSection("form",b);}
+}
+
+const FORM_KEYS=["nama","rm","usia","jk","dxMasuk","dxPasca","echoEf","tapse","echoKatup","echo","syntax","viability","ureum","kreatinin","gdp","gd2pp","hba1c","hiv","hbsag","screening","keputusan","kategori","alasanKode","status","tglKonferensi","drIntervensi","drOperator","drBtkv"];
+const FORM_PROMPT=`Foto berikut adalah "Formulir Hasil Conference Heart Team Pasien Instalasi Diagnostik dan Intervensi Kardiologi" (rumah sakit di Indonesia, sebagian tulisan tangan), mungkin disertai lembar hasil laboratorium. Ekstrak isinya.
+Balas HANYA dengan satu objek JSON dengan kunci persis berikut:
+{${FORM_KEYS.map(k=>`"${k}":""`).join(",")},"ttdIntervensi":false,"ttdOperator":false,"ttdBtkv":false,"ragu":[]}
+Aturan:
+- Isi "" bila kolom kosong, tertutup coretan/sensor, atau tidak terbaca. Jangan menebak nama atau angka.
+- Nilai lab angka saja dengan titik desimal (24,6 -> "24.6"). "echoEf" angka EF saja (mis. "38"). "usia" angka tahun. "jk" "L" atau "P". "dxPasca" salin singkatan seperti tertulis, mis. "CAD 2VD".
+- "screening": bila formulir hanya menulis "Screening" tanpa rincian (mis. "NR"). "hiv"/"hbsag" hanya bila disebut spesifik.
+- "keputusan": teks keputusan conference, tiap baris dipisah "; ", ejaan dirapikan.
+- "kategori": salah satu ${Object.keys(KATEGORI).filter(Boolean).map(k=>`"${k}"`).join(",")} dari kotak yang dicentang atau keputusan yang tegas; "" bila keputusan masih bersyarat.
+- "alasanKode": bila konservatif dan alasannya tertulis, salah satu ${Object.keys(ALASAN).filter(Boolean).map(k=>`"${k}"`).join(",")}; selain itu "".
+- "status": "pending_pemeriksaan" bila keputusan menunggu pemeriksaan lanjutan (viability, MSCT, FFR, dll); "pending_konferensi" bila bagian keputusan kosong; "diputuskan" bila keputusan tegas.
+- "tglKonferensi": YYYY-MM-DD dari tanggal di formulir.
+- "ttd...": true bila kolom tanda tangan tersebut berisi tanda tangan atau nama (termasuk yang disensor untuk privasi).
+- "ragu": daftar kunci yang pembacaannya kurang yakin.`;
+function sectionPrompt(s){
+  if(s==="lab")return `Foto berikut adalah hasil laboratorium pasien (rumah sakit Indonesia). Balas HANYA JSON: {"ureum":"","kreatinin":"","gdp":"","gd2pp":"","hba1c":"","hiv":"","hbsag":"","ragu":[]}. Angka saja dengan titik desimal, satuan mg/dL (HbA1C dalam %). "gdp" = gula darah puasa, "gd2pp" = gula darah 2 jam post prandial. "hiv"/"hbsag" tulis "NR" atau "R" seperti tertulis. "" bila tidak ada. "ragu": kunci yang kurang yakin.`;
+  const e=EXAMS.find(x=>x.key===s);
+  return `Foto berikut adalah hasil pemeriksaan ${e.title} seorang pasien jantung (rumah sakit Indonesia; bisa berupa lembar laporan, layar alat, atau rekaman). Balas HANYA JSON dengan kunci: {${e.fields.map(k=>`"${k}":""`).join(",")},"ragu":[]}. ${e.hint} Tulis dalam bahasa klinis ringkas seperti kebiasaan dokter jantung Indonesia. "" bila tidak terbaca; jangan menebak angka. "ragu": kunci yang kurang yakin.`;
+}
+const SAMPLE_ERR={not_granted:"Izin membaca dokumen ditolak. Isi kolom secara manual.",rate_limited:"Terlalu banyak permintaan. Coba lagi beberapa saat lagi.",usage_limit:"Batas pemakaian akun Anda tercapai. Coba nanti.",image_rejected:"Gambar tidak bisa dibaca. Pakai foto yang lebih jelas.",refused:"Dokumen tidak dapat diproses.",session_expired:"Sesi berakhir. Masuk ulang ke claude.ai lalu coba lagi.",prompt_too_large:"Dokumen terlalu panjang untuk dibaca sekaligus.",noimg:"Belum ada foto untuk dibaca."};
+function sanitize(k,v){
+  if(typeof v==="boolean")return v;v=String(v==null?"":v).trim();
+  if(k==="kategori"&&!(v in KATEGORI))return null;if(k==="alasanKode"&&!(v in ALASAN))return null;if(k==="jk"&&!(v in JK))return null;
+  if(k==="status"&&!["pending_pemeriksaan","pending_konferensi","diputuskan"].includes(v))return null;
+  if(/^tgl/.test(k)&&v){v=C.normDate(v);if(!v)return null;}
+  return v;
+}
+async function readSection(s,btn){
+  if(readingSecs.has(s))return;
+  collect();const target=current;const msg=$("#msg_"+s);btn.disabled=true;btn.textContent="Membaca…";msg.className="status-line";msg.textContent="Membaca foto… (10–40 detik)";readingSecs.add(s);
+  try{
+    const blobs=(await blobsFor(s)).slice(0,Math.min(3,photoLimits.images.maxCount));
+    if(!blobs.length)throw{code:"noimg"};
+    const r=await sample.json(s==="form"?FORM_PROMPT:sectionPrompt(s),{images:blobs,modelTier:"default"});
+    readingSecs.delete(s);
+    if(current!==target)return;
+    if(!r||typeof r!=="object")throw{code:"parse"};
+    collect();
+    let filled=0;const nu=new Set(Array.isArray(r.ragu)?r.ragu:[]);
+    FIELDS.forEach(k=>{
+      if(!(k in r)||r[k]===""||r[k]==null||isLockedField(k))return;
+      const v=sanitize(k,r[k]);if(v==null||v==="")return;
+      if(TTD.includes(k)){if(v&&!current[k]){current[k]=true;current[k+"At"]=new Date().toISOString();current[k+"By"]=me.id;current[k+"Src"]="foto";unsure.add(k);filled++;}return;}
+      if(k==="status"&&(C.STATUS_RANK[v]??0)<(C.STATUS_RANK[current.status]??0))return;
+      if(C.norm(current[k])===C.norm(v))return;
+      if(C.norm(current[k])&&C.norm(current[k])!==C.norm(newDefaults[k]))aiPrev[k]=current[k];
+      current[k]=v;filled++;if(nu.has(k)||k in aiPrev)unsure.add(k);});
+    current.perluCek=[...unsure];scheduleDraft();
+    drawForm({[s]:{cls:filled?"ok":"err",text:filled?`${filled} kolom terisi dari foto. Periksa sebelum menyimpan.`:"Tidak ada data baru yang terbaca dari foto ini."}});
+  }catch(e){readingSecs.delete(s);if(current!==target)return;const m=$("#msg_"+s);if(m){m.className="status-line err";m.textContent=SAMPLE_ERR[e&&e.code]||"Gagal membaca foto. Coba foto yang lebih terang dan tegak, atau isi manual.";}const b=document.querySelector(`[data-read="${s}"]`);if(b)b.disabled=false;}
+}
+
+async function viewImage(id){
+  const r=findRef(id);if(!r)return;
+  const url=r.store==="asset"?"/_blob/"+r.id:await dbImageUrl(r);if(!url){toast("Foto tidak ditemukan");return;}
+  await resolveProfiles([r.by]);
+  $("#lbImg").src=url;$("#lbCap").textContent=`Diunggah ${pname(r.by)} · ${fmtDate(r.at)} · ketuk untuk perbesar`;
+  lbFocus=document.activeElement;$("#lightbox").classList.remove("zoom");$("#lightbox").hidden=false;setTimeout(()=>$("#lbClose").focus(),0);
+}
+$("#lbImg").onclick=()=>$("#lightbox").classList.toggle("zoom");
+let lbFocus=null;function closeLightbox(){$("#lightbox").hidden=true;$("#lbImg").removeAttribute("src");if(lbFocus&&lbFocus.isConnected){try{lbFocus.focus();}catch(e){}}lbFocus=null;}
+$("#lbClose").onclick=closeLightbox;
+
+async function save(opts={}){
+  if(saving||!current)return;
+  collect();
+  if(uploading){toast("Tunggu unggahan foto selesai.");return;}
+  if(!current.nama&&!current.rm){toast("Isi minimal nama pasien atau No RM");jumpTo("nama");return;}
+  const dupP=current.rm?patients.find(p=>p.id!==current.id&&C.rmKey(p.rm)===C.rmKey(current.rm)):null;
+  if(dupP&&(isNew||C.rmKey(current.rm)!==C.rmKey(prevDoc&&prevDoc.rm))){toast(`No RM ${current.rm} sudah terdaftar atas nama ${dupP.nama||"pasien lain"}. Buka data itu untuk memperbarui.`);jumpTo("rm");return;}
+  if(canEditField("status")&&["menolak","meninggal","lost"].includes(current.status)&&!C.norm(current.keteranganAkhir)){openSecs.add("tx");drawForm();toast("Isi keterangan status akhir.");jumpTo("keteranganAkhir");return;}
+  if(canEditField("status")&&current.status==="dirujuk"&&!C.norm(current.rujukanTujuan)){openSecs.add("tx");drawForm();toast("Isi RS tujuan rujukan.");jumpTo("rujukanTujuan");return;}
+  if(unsure.size&&!opts.skipUnsure&&!opts.lock&&!opts.unlock&&!opts.force){confirmState="unsure";drawFoot();return;}
+  let autoNote="";
+  if(canEditField("status")&&!current.locked&&current.status==="pending_konferensi"&&C.norm(current.keputusan)&&C.norm(current.kategori)){current.status="diputuskan";autoNote=" Status diubah ke Keputusan final (menunggu verifikasi dokter).";}
+  const prevStatus=isNew?"":(prevDoc&&prevDoc.status)||"";
+  if(prevStatus&&C.CLOSED.includes(prevStatus)&&!C.CLOSED.includes(current.status)){["tglStatusAkhir","keteranganAkhir","rujukanTujuan","rujukanDiterima"].forEach(k=>{current[k]="";});}
+  saving=true;confirmState=null;drawFoot();
+  const now=new Date().toISOString();
+  if(isNew){const rid=C.docIdFromRm(current.rm);if(rid&&rid!==current.id){const old=current.id;current.id=rid;clearDraft(old);}}
+  const ref=db.doc("patients/"+current.id);
+  try{
+    if(isNew){
+      const ex=await ref.get();
+      if(ex.exists){isNew=false;prevDoc={};}
+    }
+    if(isNew){
+      const body={};SAVE_KEYS.forEach(k=>{body[k]=current[k]===undefined?(TTD.includes(k)?false:k==="perluCek"?[]:""):current[k];});
+      const locking=!!opts.lock;
+      Object.assign(body,{files:C.mergeFiles({},sessionUploads,new Set(pendingDel.keys())),locked:locking,lockedAt:locking?now:"",lockedBy:locking?me.id:"",
+        status:locking&&(C.STATUS_RANK[current.status]??0)<2?"diputuskan":current.status,
+        log:[{at:now,by:me.id,action:"Membuat data"}].concat(locking?[{at:now,by:me.id,k:"lock",action:opts.action}]:[]),createdAt:now,createdBy:me.id,updatedAt:now,updatedBy:me.id});
+      await ref.set(body);
+    }else{
+      const snap=await ref.get();
+      if(!snap.exists){saving=false;drawFoot();$("#conflictZone").innerHTML=`<div class="banner err"><span class="grow">Data pasien ini sudah dihapus oleh pengguna lain.</span></div>`;return;}
+      const latest=snap.data();
+      const unlocking=!!opts.unlock&&canUnlock(myRole)&&latest.locked;
+      const res=C.computeSave({base:prevDoc||{},latest,cur:current,keys:SAVE_KEYS,lockedKeys:LOCKED,unlocking});
+      if(res.conflicts.length&&!opts.force){
+        saving=false;drawFoot();await resolveProfiles([latest.updatedBy]);
+        $("#conflictZone").innerHTML=`<div class="banner err"><span class="grow"><b>${esc(pname(latest.updatedBy))}</b> baru saja mengubah kolom yang sama: ${esc(res.conflicts.map(k=>LABEL[k]||k).join(", "))}.</span><button class="btn small" id="cfReload">Pakai data terbaru</button><button class="btn small danger" id="cfForce">Timpa dengan isian saya</button></div>`;
+        $("#cfReload").onclick=()=>{collect();res.conflicts.forEach(k=>{current[k]=latest[k];});prevDoc=Object.assign({},prevDoc,Object.fromEntries(res.conflicts.map(k=>[k,latest[k]])));drawForm();toast("Kolom yang bentrok diganti dengan data terbaru.");};
+        $("#cfForce").onclick=()=>save(Object.assign({},opts,{force:true,skipUnsure:true}));
+        $("#conflictZone").scrollIntoView({block:"center",behavior:"smooth"});
+        return;
+      }
+      const patch=res.patch;const extraLog=[];
+      if(patch.tglKonferensi!==undefined&&latest.tglKonferensi&&patch.tglKonferensi&&patch.tglKonferensi!==latest.tglKonferensi&&!latest.locked){const h=C.archiveConf(latest);if(h){patch.riwayatKonferensi=h;extraLog.push({at:now,by:me.id,action:`Konferensi ulang: keputusan ${fmtDate(latest.tglKonferensi)} diarsipkan`});}}
+      if(prevStatus&&C.CLOSED.includes(prevStatus)&&patch.status!==undefined&&!C.CLOSED.includes(patch.status)&&(latest.keteranganAkhir||latest.rujukanTujuan))extraLog.push({at:now,by:me.id,action:`Status akhir sebelumnya: ${STATUS[prevStatus].label}${latest.rujukanTujuan?" ke "+latest.rujukanTujuan:""}${latest.keteranganAkhir?" ("+latest.keteranganAkhir+")":""}`});
+      if(opts.lock&&!latest.locked){
+        const bl=C.verifyBlockers(Object.assign({},latest,patch),LOCKED);
+        if(bl.length){saving=false;drawFoot();$("#finalZone").innerHTML=`<div class="banner warn">Lengkapi dulu: ${esc(bl.join(", "))}.</div>`;return;}
+        Object.assign(patch,{locked:true,lockedAt:now,lockedBy:me.id});
+        const st=patch.status!==undefined?patch.status:latest.status;if((C.STATUS_RANK[st]??0)<2)patch.status="diputuskan";
+        extraLog.push({at:now,by:me.id,k:"lock",action:opts.action});
+      }else if(opts.lock&&latest.locked){toast("Sudah diverifikasi oleh pengguna lain.");}
+      if(unlocking){Object.assign(patch,{locked:false,lockedAt:"",lockedBy:""});extraLog.push({at:now,by:me.id,k:"lock",action:opts.action});}
+      if(sessionUploads.length||pendingDel.size)patch.files=C.mergeFiles(latest.files,sessionUploads,new Set(pendingDel.keys()));
+      const changed=Object.keys(patch).filter(k=>!["files","locked","lockedAt","lockedBy"].includes(k)&&!TTD_META.includes(k));
+      if(!changed.length&&!patch.files&&!extraLog.length){saving=false;clearDraft(current.id);finishClose(false);if(res.dropped.length)toast("Tidak ada perubahan yang bisa disimpan: keputusan sudah dikunci.");return;}
+      const parts=[];
+      if(patch.status!==undefined&&patch.status!==latest.status)parts.push("Status → "+(STATUS[patch.status]||{}).short);
+      const ch=changed.filter(k=>k!=="status"&&k!=="perluCek").map(k=>LABEL[k]||k);if(ch.length)parts.push("Ubah "+ch.slice(0,5).join(", ")+(ch.length>5?` +${ch.length-5}`:""));
+      if(sessionUploads.length)parts.push(`+${sessionUploads.length} foto`);if(pendingDel.size)parts.push(`−${pendingDel.size} foto`);
+      const log=(latest.log||[]).slice();if(parts.length)log.push({at:now,by:me.id,action:parts.join("; ")});extraLog.forEach(e=>log.push(e));
+      patch.log=C.trimLog(log);patch.updatedAt=now;patch.updatedBy=me.id;
+      await ref.update(patch);
+      if(res.dropped.length)toast("Sebagian perubahan tidak disimpan karena keputusan sudah dikunci dokter.");
+    }
+    const dels=[...pendingDel.values()];const keep=new Set(fileIds(current.files).concat(sessionUploads.map(u=>u.ref.id)));sessionUploads=[];pendingDel=new Map();dels.forEach(removeImage);
+    if(current._draftBanner)discardDraft(current.id,[...keep]);else clearDraft(current.id);saving=false;
+    toast((opts.lock?"Keputusan diverifikasi dan dikunci":opts.unlock?"Kunci dibuka":isNew?"Pasien tersimpan":"Perubahan tersimpan")+autoNote);
+    finishClose(false);
+  }catch(e){saving=false;drawFoot();toast(e&&e.code==="quota_exceeded"?"Kapasitas database penuh. Hubungi pemilik.":"Gagal menyimpan. Isian aman sebagai draf; coba lagi saat sinyal membaik.");writeDraft();}
+}
+
+/* ---------- import report ---------- */
+const IMPORT_KEYS=["nama","rm","usia","jk","dxMasuk","dxPasca","syntax","echoEf","tapse","echoKatup","echo","viability","ekg","angio","ct","mri","treadmill","ureum","kreatinin","gdp","gd2pp","hba1c","hiv","hbsag","screening","keputusan","kategori","alasanKode","status","tglKonferensi","jenisTindakan","tglTindakan","pelaksanaTindakan","drIntervensi","drOperator","drBtkv","catatan"];
+function bulkPrompt(ctxDate,part,total,hasImage){
+  return `Ini ${hasImage?"gambar halaman dan ":""}teks dari laporan hasil konferensi Heart Team (Instalasi Diagnostik dan Intervensi Kardiologi, rumah sakit di Indonesia), bagian ${part} dari ${total}. Laporan biasanya berupa tabel: No, Nama, No RM, Kesimpulan Post Tindakan, Hasil Echo (Syntax score, EF, TAPSE, katup), Keputusan conference.
+Ekstrak SETIAP pasien. Balas HANYA JSON: {"tanggal":"","pasien":[{${IMPORT_KEYS.map(k=>`"${k}":""`).join(",")},"lanjutan":false,"ragu":[]}]}
+Aturan:
+- Isi "" bila tidak ada. Jangan menebak nama, No RM, atau angka; salin No RM persis.
+- "tanggal": tanggal pelaksanaan conference (YYYY-MM-DD) yang tertulis di bagian ini, atau "". "tglKonferensi" tiap pasien = tanggal conference yang berlaku untuk barisnya; bila tidak ada di bagian ini pakai "${ctxDate||""}".
+- "dxPasca": kolom kesimpulan post tindakan, salin singkatan seperti tertulis (mis. "CAD 3VD LM disease").
+- Angka dengan titik desimal: "echoEf" angka EF saja ("48"), "tapse" angka cm ("1.9"), "syntax" angka ("43").
+- "echoKatup": ringkas, mis. "MR trace, TR trace, AV normal, PR mild". Temuan echo lain ke "echo".
+- "keputusan": keputusan conference dalam satu baris, butir dipisah "; " (mis. "CABG di Iskak; jika menolak DSE"). Keterangan dalam kurung seperti "(pasien sudah dihubungi)" masuk ke "catatan".
+- "kategori" dari keputusan utama (butir pertama): salah satu ${Object.keys(KATEGORI).filter(Boolean).map(k=>`"${k}"`).join(",")}; "" bila masih menunggu pemeriksaan.
+- "status": "diputuskan" bila ada keputusan tegas; "pending_pemeriksaan" bila menunggu pemeriksaan (viability, DSE, MSCT, FFR); "pending_konferensi" bila keputusan kosong.
+- "lanjutan": true HANYA untuk baris paling atas bagian ini yang merupakan lanjutan pasien dari halaman sebelumnya (tanpa nama dan No RM).
+- "ragu": kunci yang pembacaannya kurang yakin untuk pasien itu.`;
+}
+function newImp(){return {stage:"pick",rows:[],busy:false,msg:"",pct:0,files:[],warn:[]};}
+function openImport(){imp=newImp();openSheet("import");drawImport();}
+function drawImport(){
+  const s=imp;const selN=s.rows.filter(r=>r.sel).length;
+  $("#sheet").innerHTML=`
+  <div class="sheet-head"><h2 id="sheetTitle">Impor laporan konferensi</h2><button class="btn ghost" id="impClose"${s.busy?" disabled":""}>Tutup</button></div>
+  <div class="sheet-body">
+    ${s.stage==="pick"?`
+      <label class="drop" id="drop" for="impFile">
+        <span class="ic"><svg width="24" height="24" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2.5h6.5L16 7v10.5H5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 2.5V7h5M10.5 15v-5M8 12.5l2.5-2.5 2.5 2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <b>Pilih atau seret laporan ke sini</b>
+        <small>Semua pasien di dalam laporan dibaca otomatis, lalu Anda periksa sebelum disimpan.</small>
+        <span class="fmts"><span>PDF</span><span>DOCX</span><span>JPG</span><span>PNG</span></span>
+      </label>
+      <input type="file" id="impFile" class="sr-only" multiple accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*">
+      <p class="status-line" style="margin:0">Pasien dengan No RM yang sudah ada akan diperbarui, bukan diduplikasi. Laporan yang lebih lama tidak menimpa data yang lebih baru, dan data yang sudah diverifikasi dokter hanya ditambah data penunjangnya.</p>
+      ${s.msg?`<div class="banner warn">${esc(s.msg)}</div>`:""}`:""}
+    ${s.stage==="reading"||s.stage==="saving"?`
+      <div class="eyebrow">${s.stage==="reading"?"Membaca dokumen":"Menyimpan"}</div>
+      <div class="progress"><i style="width:${s.pct}%"></i></div>
+      <p class="status-line" style="margin:0" role="status">${esc(s.msg)}</p>`:""}
+    ${s.stage==="review"?`
+      <div class="banner lock"><span class="grow"><b>${s.rows.length} pasien</b> terbaca dari ${esc(s.files.join(", "))}. Periksa, perbaiki nama/No RM bila perlu, lalu impor.</span></div>
+      ${s.warn.map(w=>`<div class="banner warn">${esc(w)}</div>`).join("")}
+      <div class="people">${s.rows.map((r,i)=>importRowHtml(r,i)).join("")}</div>`:""}
+  </div>
+  ${s.stage==="review"?`<div class="sheet-foot"><div class="foot-row"><button class="btn" id="impBack">Pilih file lain</button><span class="spacer"></span><button class="btn primary" id="impGo"${selN?"":" disabled"}>Impor ${selN} pasien</button></div></div>`:""}`;
+  $("#impClose").onclick=()=>{if(!imp.busy)closeSheet();};
+  if(s.stage==="pick"){
+    const dz=$("#drop");
+    $("#impFile").onchange=e=>processImport(Array.from(e.target.files));
+    dz.addEventListener("dragover",e=>{e.preventDefault();dz.classList.add("over");});
+    dz.addEventListener("dragleave",()=>dz.classList.remove("over"));
+    dz.addEventListener("drop",e=>{e.preventDefault();dz.classList.remove("over");processImport(Array.from(e.dataTransfer.files));});
+  }
+  if(s.stage==="review"){
+    const upd=()=>{const n=s.rows.filter(r=>r.sel).length;$("#impGo").textContent=`Impor ${n} pasien`;$("#impGo").disabled=!n;};
+    $("#sheet").querySelectorAll("[data-i]").forEach(cb=>cb.onchange=()=>{s.rows[+cb.dataset.i].sel=cb.checked;upd();});
+    $("#sheet").querySelectorAll("[data-ie]").forEach(inp=>inp.onchange=()=>{const [i,k]=inp.dataset.ie.split("|");const r=s.rows[+i];r[k]=inp.value.trim();computeMatch(r);
+      if(k==="rm"&&r.rm)r.sel=true;drawImport();});
+    $("#impBack").onclick=()=>{imp=newImp();drawImport();};
+    $("#impGo").onclick=commitImport;
+  }
+}
+function computeMatch(r){r.match=C.matchPatient(r,patients);r.plan=r.match?C.importPatch(r.match,r,IMPORT_KEYS,LOCKED):null;}
+function importRowHtml(r,i){
+  const ex=r.match;const badge=!ex?(r.rm?["Baru","green"]:["Tanpa No RM","red"]):ex.locked?["Terverifikasi · hanya data penunjang","blue"]:["Perbarui data","amber"];
+  const ms=[["EF",r.echoEf&&r.echoEf+"%"],["SYNTAX",r.syntax],["TAPSE",r.tapse]].filter(m=>m[1]);
+  return `<div class="irow"><input type="checkbox" data-i="${i}" aria-label="Impor ${esc(r.nama||"pasien")}"${r.sel?" checked":""}><div class="body">
+    <div class="hd"><input data-ie="${i}|nama" value="${esc(r.nama)}" placeholder="Nama pasien" aria-label="Nama"><input data-ie="${i}|rm" class="mono${r.rm?"":" need"}" value="${esc(r.rm)}" placeholder="No RM (wajib)" aria-label="No RM"${r.rm?"":' aria-invalid="true"'}></div>
+    <span class="hd" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span class="pill" style="background:var(--${badge[1]}-soft);color:var(--${badge[1]})">${badge[0]}</span><span class="sub">${esc([r.dxPasca,r.tglKonferensi&&fmtDate(r.tglKonferensi)].filter(Boolean).join(" · "))}</span></span>
+    ${ms.length?`<span class="metrics">${ms.map(m=>`<span class="m"><i>${m[0]}</i>${esc(m[1])}</span>`).join("")}</span>`:""}
+    ${r.echoKatup?`<span class="dec">Katup: ${esc(r.echoKatup)}</span>`:""}
+    ${r.keputusan?`<span class="dec"><b style="color:var(--ink)">${esc(KATEGORI[r.kategori]||"")}</b> ${esc(r.keputusan)}${r.catatan?` (${esc(r.catatan)})`:""}</span>`:""}
+    ${ex&&r.plan&&r.plan.reconfLocked?`<span class="status-line" style="color:var(--blue)">Konferensi ulang untuk pasien yang sudah diverifikasi: keputusan baru tidak diterapkan. Minta dokter membuka kunci, lalu impor ulang atau ubah manual.</span>`:""}
+    ${ex&&r.plan&&r.plan.newer&&!r.plan.reconfLocked?`<span class="status-line" style="color:var(--blue)">Konferensi ulang: keputusan lama (${esc(fmtDate(ex.tglKonferensi))}) disimpan di riwayat.</span>`:""}
+    ${ex&&r.plan?(r.plan.changes.length?`<span class="chg"><b>Yang berubah${r.plan.older?" (laporan lebih lama: hanya mengisi kolom kosong)":""}:</b>${r.plan.changes.slice(0,8).map(([k,a,b])=>`<span>${esc(LABEL[k]||k)}: ${a?`<s>${esc(disp(k,a))}</s> → `:""}${esc(disp(k,b))}</span>`).join("")}${r.plan.changes.length>8?`<span>+${r.plan.changes.length-8} lainnya</span>`:""}</span>`:`<span class="sub">Tidak ada perubahan untuk pasien ini.</span>`):""}
+    ${(r.ragu||[]).length?`<span class="status-line" style="color:var(--amber)">Kurang yakin: ${esc(r.ragu.map(k=>LABEL[k]||k).join(", "))} — akan ditandai "perlu cek".</span>`:""}
+  </div></div>`;
+}
+function setImp(pct,msg){imp.pct=pct;imp.msg=msg;const bar=document.querySelector("#sheet .progress i");if(bar){bar.style.width=pct+"%";const l=bar.parentElement.nextElementSibling;if(l)l.textContent=msg;}else drawImport();}
+
+async function pdfChunks(file,canImg){
+  await loadScript(LIB.pdfw);await loadScript(LIB.pdf);
+  const lib=window.pdfjsLib;const pdf=await lib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
+  const out=[];
+  try{
+    for(let i=1;i<=pdf.numPages;i++){
+      setImp(4,`Menyiapkan ${file.name} halaman ${i}/${pdf.numPages}…`);
+      const page=await pdf.getPage(i);const vp1=page.getViewport({scale:1});const tc=await page.getTextContent();
+      const items=tc.items.map(it=>{const t=lib.Util.transform(vp1.transform,it.transform);return {x:t[4],y:t[5],s:it.str,w:(it.width||0),h:Math.hypot(t[2],t[3])};});
+      const text=C.buildLines(items).join("\n");
+      let img=null;
+      if(canImg){const vp=page.getViewport({scale:Math.min(2.2,1800/Math.max(vp1.width,vp1.height))});
+        const cv=document.createElement("canvas");cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);const cx=cv.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,cv.width,cv.height);
+        await page.render({canvasContext:cx,viewport:vp}).promise;img=await new Promise(r=>cv.toBlob(r,"image/jpeg",0.85));}
+      page.cleanup();
+      if(!text.trim()&&!img)continue;
+      out.push({text:text.slice(0,30000),images:img?[img]:[],label:`${file.name} hal. ${i}`});
+    }
+  }finally{try{await pdf.destroy();}catch(e){}}
+  return out;
+}
+async function docxChunks(file){
+  await loadScript(LIB.mammoth);
+  const res=await window.mammoth.convertToHtml({arrayBuffer:await file.arrayBuffer()});
+  const dom=new DOMParser().parseFromString(res.value,"text/html");
+  const lines=[];
+  const cellText=td=>Array.from(td.querySelectorAll("p,li")).map(p=>p.textContent.trim()).filter(Boolean).join(" / ")||td.textContent.trim();
+  dom.body.childNodes.forEach(n=>{
+    if(n.nodeName==="TABLE"){n.querySelectorAll("tr").forEach(tr=>{const cells=Array.from(tr.children).map(td=>cellText(td).replace(/\s+/g," "));if(cells.some(Boolean))lines.push("| "+cells.join(" | ")+" |");});}
+    else{const t=(n.textContent||"").trim();if(t)lines.push(t);}
+  });
+  const out=[];let buf=[],len=0,part=1;const header=lines.slice(0,3).join("\n");
+  lines.forEach(l=>{if(len+l.length>9000&&buf.length){out.push({text:(part>1?header+"\n…\n":"")+buf.join("\n"),images:[],label:`${file.name} bag. ${part}`});part++;buf=[];len=0;}buf.push(l);len+=l.length+1;});
+  if(buf.length)out.push({text:(part>1?header+"\n…\n":"")+buf.join("\n"),images:[],label:`${file.name} bag. ${part}`});
+  return out;
+}
+async function processImport(files){
+  if(!files.length)return;
+  if(!sample){imp.msg="Pembacaan otomatis tidak tersedia di tampilan ini.";drawImport();return;}
+  const canImg=!!(photoLimits&&photoLimits.images);
+  imp.stage="reading";imp.busy=true;imp.files=files.map(f=>f.name);imp.warn=[];drawImport();
+  let chunks=[];
+  for(const f of files){
+    const n=f.name.toLowerCase();
+    try{
+      if(n.endsWith(".pdf")||f.type==="application/pdf")chunks=chunks.concat(await pdfChunks(f,canImg));
+      else if(n.endsWith(".docx"))chunks=chunks.concat(await docxChunks(f));
+      else if(n.endsWith(".doc"))imp.warn.push(`${f.name}: format .doc lama belum didukung. Simpan ulang sebagai .docx atau PDF.`);
+      else if(f.type.startsWith("image/")||/\.(jpe?g|png|webp|heic|heif)$/.test(n)){if(canImg)chunks.push({text:"",images:[await compress(f,2000,0.85)],label:f.name});else imp.warn.push(`${f.name}: membaca foto tidak tersedia di tampilan ini.`);}
+      else imp.warn.push(`${f.name}: format tidak dikenali.`);
+    }catch(e){imp.warn.push(`${f.name}: tidak bisa dibuka${/\.(heic|heif)$/.test(n)?" (HEIC belum didukung di perangkat ini; kirim sebagai JPG)":" (mungkin terkunci password atau rusak)"}.`);}
+  }
+  if(!chunks.length){const w=imp.warn.join(" ");imp=newImp();imp.msg=w||"Tidak ada isi yang bisa dibaca dari file ini.";drawImport();return;}
+  let rows=[],ctxDate="",prevOk=false,dropped=0;
+  for(let i=0;i<chunks.length;i++){
+    const c=chunks[i];setImp(Math.round(8+88*i/chunks.length),`Membaca ${c.label} (${i+1}/${chunks.length})… sekitar 20–60 detik per bagian`);
+    const prompt=bulkPrompt(ctxDate,i+1,chunks.length,!!c.images.length)+(c.text?`\n\nTEKS:\n${c.text}`:"");
+    try{
+      const r=await sample.json(prompt,Object.assign({modelTier:"default"},c.images.length?{images:c.images}:{}));
+      {const td=C.normDate(r&&r.tanggal);if(td)ctxDate=td;}
+      const list=Array.isArray(r&&r.pasien)?r.pasien:[];
+      list.forEach((p,j)=>{
+        const row={};IMPORT_KEYS.forEach(k=>{const v=sanitize(k,p&&p[k]);row[k]=v==null?"":String(v);});
+        row.ragu=Array.isArray(p&&p.ragu)?p.ragu.filter(k=>IMPORT_KEYS.includes(k)):[];
+        if(!row.tglKonferensi&&ctxDate)row.tglKonferensi=ctxDate;
+        if(!row.nama&&!row.rm){
+          if(!(j===0&&p&&p.lanjutan&&rows.length&&prevOk)){if(IMPORT_KEYS.some(k=>row[k]&&k!=="tglKonferensi"))dropped++;return;}
+          {const last=rows[rows.length-1];IMPORT_KEYS.forEach(k=>{if(!row[k]||k==="tglKonferensi"||k==="kategori"||k==="status")return;if(!last[k])last[k]=row[k];else if(!last[k].includes(row[k]))last[k]=last[k]+"; "+row[k];});}
+          return;
+        }
+        rows.push(row);
+      });
+      prevOk=true;
+    }catch(e){prevOk=false;
+      if(e&&["not_granted","usage_limit","session_expired"].includes(e.code)){imp=newImp();imp.msg=SAMPLE_ERR[e.code];drawImport();return;}
+      imp.warn.push(`${c.label} gagal dibaca${e&&SAMPLE_ERR[e.code]?": "+SAMPLE_ERR[e.code]:""}. Pasien di bagian ini mungkin terlewat.`);
+    }
+  }
+  if(dropped)imp.warn.push(`${dropped} baris tanpa nama dan No RM tidak bisa dipastikan milik pasien mana, jadi dilewati. Periksa laporan aslinya.`);
+  rows=C.dedupeRows(rows,IMPORT_KEYS).filter(r=>r.nama||r.rm);
+  rows.forEach(r=>{if(!r.status||(r.status==="pending_konferensi"&&r.keputusan&&r.kategori))r.status=r.keputusan?"diputuskan":"pending_konferensi";computeMatch(r);r.sel=!!r.rm||!!r.match;
+    if((r.konflik||[]).length)imp.warn.push(`${r.nama||r.rm}: nilai berbeda di dua tempat dalam laporan (${r.konflik.map(k=>LABEL[k]||k).join(", ")}). Dipakai yang tanggal konferensinya lebih baru; ditandai "perlu cek".`);});
+  imp.busy=false;
+  if(!rows.length){const w=imp.warn.join(" ");imp=newImp();imp.msg=(w+" Tidak ada pasien yang terbaca. Pastikan file adalah laporan hasil konferensi.").trim();drawImport();return;}
+  imp.rows=rows;imp.stage="review";drawImport();
+}
+async function commitImport(){
+  const sel=imp.rows.filter(r=>r.sel);const src=imp.files.join(", ");
+  imp.stage="saving";imp.busy=true;drawImport();
+  let created=0,updated=0,same=0,failed=0;
+  for(let i=0;i<sel.length;i++){
+    const r=sel[i];setImp(Math.round(100*i/sel.length),`Menyimpan ${r.nama||r.rm} (${i+1}/${sel.length})…`);
+    const now=new Date().toISOString();
+    try{
+      let ex=null;
+      if(r.match){const s=await db.doc("patients/"+r.match.id).get();if(s.exists)ex=Object.assign({id:s.id},s.data());}
+      if(!ex){const m=C.matchPatient(r,patients);if(m){const s=await db.doc("patients/"+m.id).get();if(s.exists)ex=Object.assign({id:s.id},s.data());}}
+      const rid=C.docIdFromRm(r.rm);
+      if(!ex&&rid){const s=await db.doc("patients/"+rid).get();if(s.exists)ex=Object.assign({id:s.id},s.data());}
+      if(ex){
+        const {patch,changes}=C.importPatch(ex,r,IMPORT_KEYS,LOCKED);
+        if(!changes.length){same++;continue;}
+        const ragu=(r.ragu||[]).filter(k=>k in patch);
+        if(ragu.length)patch.perluCek=Array.from(new Set((ex.perluCek||[]).concat(ragu)));
+        const extra=patch.riwayatKonferensi?[{at:now,by:me.id,action:`Konferensi ulang: keputusan ${fmtDate(ex.tglKonferensi)} diarsipkan`}]:[];
+        patch.log=C.trimLog((ex.log||[]).concat(extra,[{at:now,by:me.id,action:`Impor dari ${src}: ubah ${changes.map(c=>LABEL[c[0]]||c[0]).slice(0,5).join(", ")}${changes.length>5?" +"+(changes.length-5):""}`}]));
+        patch.updatedAt=now;patch.updatedBy=me.id;
+        await db.doc("patients/"+ex.id).update(patch);updated++;
+      }else{
+        const body={};SAVE_KEYS.forEach(k=>{body[k]=TTD.includes(k)?false:k==="perluCek"?[]:"";});IMPORT_KEYS.forEach(k=>{if(r[k])body[k]=r[k];});
+        body.perluCek=(r.ragu||[]).filter(k=>r[k]);
+        Object.assign(body,{files:{},locked:false,lockedAt:"",lockedBy:"",log:[{at:now,by:me.id,action:`Impor dari ${src}`}],createdAt:now,createdBy:me.id,updatedAt:now,updatedBy:me.id});
+        await (rid?db.doc("patients/"+rid):db.collection("patients").doc()).set(body);created++;
+      }
+    }catch(e){failed++;if(e&&e.code==="quota_exceeded"){toast("Kapasitas database penuh. Hubungi pemilik.");break;}}
+  }
+  imp.busy=false;closeSheet();
+  toast(`Impor selesai: ${created} baru, ${updated} diperbarui${same?`, ${same} tanpa perubahan`:""}${failed?`, ${failed} gagal`:""}`);
+  setFilter((created+updated)&&imp.rows.some(r=>(r.ragu||[]).length)?"cek":"all");
+}
+
+/* ---------- report ---------- */
+function openReport(){const d=new Date();rep={from:iso(new Date(d.getFullYear(),d.getMonth(),1)),to:today(),which:"all"};openSheet("report");drawReport();}
+function expandHistory(ps){const out=[];ps.forEach(p=>{out.push(p);(Array.isArray(p.riwayatKonferensi)?p.riwayatKonferensi:[]).forEach(h=>{if(h&&h.tgl)out.push(Object.assign({},p,{tglKonferensi:h.tgl,keputusan:h.keputusan,kategori:h.kategori,alasanKode:h.alasanKode,status:h.status,locked:h.locked,tglTindakan:"",catatan:"",_hist:true}));});});return out;}
+function reportRows(){
+  return expandHistory(patients).filter(p=>p.tglKonferensi&&p.tglKonferensi>=rep.from&&p.tglKonferensi<=rep.to&&(rep.which==="all"||(rep.which==="final"?(C.STATUS_RANK[stOf(p)]>=2):C.isPending(p))))
+    .sort((a,b)=>a.tglKonferensi.localeCompare(b.tglKonferensi)||String(a.nama||"").localeCompare(String(b.nama||"")));
+}
+function reportKpi(rows){
+  const cur=rows.filter(p=>!p._hist);const k=C.kpis(cur,today());const byCat={};rows.forEach(p=>{const c=KATEGORI[p.kategori||""]||p.kategori;byCat[c]=(byCat[c]||0)+1;});
+  const byStat={};rows.forEach(p=>{const s=STATUS[stOf(p)].short;byStat[s]=(byStat[s]||0)+1;});
+  return {k,byCat,byStat,verified:rows.filter(p=>p.locked).length,n:rows.length};
+}
+function echoCell(p){return [p.syntax&&`Syntax score: ${p.syntax}`,p.echoEf&&`EF: ${p.echoEf}%`,p.tapse&&`TAPSE: ${String(p.tapse).replace(".",",")} cm`,p.echoKatup&&`Katup: ${p.echoKatup}`,p.echo,p.viability&&`Viability/DSE: ${p.viability}`].filter(Boolean).join("\n");}
+function decCell(p){const k=stOf(p);return [p._hist?"[keputusan konferensi sebelumnya]":"",p.keputusan?(p.keputusan.split(/;\s*/).map((s,i,a)=>a.length>1?`${i+1}. ${s}`:s).join("\n")):"",p.alasanKode&&`Alasan: ${ALASAN[p.alasanKode]}`,p.catatan&&`(${p.catatan})`,k!=="diputuskan"?`[${STATUS[k].label}${k==="dirujuk"&&p.rujukanTujuan?" – "+p.rujukanTujuan:""}]`:"",p.tglTindakan&&`Tindakan: ${p.jenisTindakan||""} ${fmtLong(p.tglTindakan)}`.replace(/\s+/g," "),p.locked?"✓ terverifikasi":""].filter(Boolean).join("\n");}
+function groups(rows){const g=[];rows.forEach(p=>{let x=g.find(y=>y.date===p.tglKonferensi);if(!x){x={date:p.tglKonferensi,rows:[]};g.push(x);}x.rows.push(p);});return g;}
+function drawReport(){
+  const rows=reportRows();const g=groups(rows);let n=0;const K=reportKpi(rows);
+  const quick=[["Bulan ini",()=>{const d=new Date();return [iso(new Date(d.getFullYear(),d.getMonth(),1)),today()];}],["Bulan lalu",()=>{const d=new Date();return [iso(new Date(d.getFullYear(),d.getMonth()-1,1)),iso(new Date(d.getFullYear(),d.getMonth(),0))];}],["3 bulan",()=>{const d=new Date();return [iso(new Date(d.getFullYear(),d.getMonth()-2,1)),today()];}],["Tahun ini",()=>[new Date().getFullYear()+"-01-01",today()]]];
+  const canDl=!!(downloads&&myExport&&rows.length);
+  $("#sheet").innerHTML=`
+  <div class="sheet-head"><h2 id="sheetTitle">Laporan &amp; KPI</h2><button class="btn ghost" id="repClose">Tutup</button></div>
+  <div class="sheet-body">
+    <div class="range">
+      <div class="f"><label for="rFrom">Dari tanggal</label><input type="date" id="rFrom" value="${rep.from}"></div>
+      <div class="f"><label for="rTo">Sampai tanggal</label><input type="date" id="rTo" value="${rep.to}"></div>
+      <div class="f"><label for="rWhich">Pasien</label><select id="rWhich"><option value="all"${rep.which==="all"?" selected":""}>Semua</option><option value="final"${rep.which==="final"?" selected":""}>Sudah diputuskan / ditutup</option><option value="pending"${rep.which==="pending"?" selected":""}>Masih pending</option></select></div>
+    </div>
+    <div class="chips">${quick.map((q,i)=>`<button data-q="${i}">${q[0]}</button>`).join("")}</div>
+    ${patients.filter(p=>!p.tglKonferensi).length?`<div class="banner warn"><span class="grow">${patients.filter(p=>!p.tglKonferensi).length} pasien belum punya tanggal konferensi sehingga tidak masuk laporan. Lengkapi tanggalnya di data pasien.</span></div>`:""}
+    <div class="kgrid">
+      <div><b>${rows.length}</b><span>pasien dari ${g.length} konferensi</span></div>
+      <div><b>${K.k.medianKT==null?"—":K.k.medianKT}</b><span>median hari konferensi → tindakan</span></div>
+      <div><b>${K.k.overdue}</b><span>pending &gt;30 hari</span></div>
+      <div><b>${K.verified}/${rows.length}</b><span>terverifikasi dokter</span></div>
+    </div>
+    ${rows.length?`<p class="status-line" style="margin:0">Kategori: ${esc(Object.entries(K.byCat).map(([a,b])=>a+" "+b).join(" · "))}<br>Status: ${esc(Object.entries(K.byStat).map(([a,b])=>a+" "+b).join(" · "))}</p>
+    <div class="tablewrap"><table class="rep"><thead><tr><th>No</th><th>Nama</th><th>No RM</th><th>Kesimpulan post tindakan</th><th>Hasil echo</th><th>Keputusan conference</th></tr></thead><tbody>
+      ${g.map(x=>`<tr class="grp"><td colspan="6">Konferensi ${esc(fmtLong(x.date))}</td></tr>`+x.rows.map(p=>`<tr><td class="mono">${++n}</td><td>${esc(p.nama)}</td><td class="mono">${esc(p.rm)}</td><td>${esc(p.dxPasca)}</td><td class="pre">${esc(echoCell(p))}</td><td class="pre">${esc(decCell(p))}</td></tr>`).join("")).join("")}
+    </tbody></table></div>`:`<div class="empty">Tidak ada pasien dengan tanggal konferensi pada rentang ini.</div>`}
+    ${myExport?"":`<p class="status-line" style="margin:0">Unduhan laporan hanya untuk pengguna yang diizinkan pemilik.</p>`}
+    <p class="status-line" id="repMsg" style="margin:0" role="status"></p>
+  </div>
+  <div class="sheet-foot"><div class="foot-row"><span class="spacer"></span><button class="btn" id="repWord"${canDl?"":" disabled"}>Unduh Word</button><button class="btn primary" id="repPdf"${canDl?"":" disabled"}>Unduh PDF</button></div></div>`;
+  $("#repClose").onclick=closeSheet;
+  const upd=()=>{rep.from=$("#rFrom").value||rep.from;rep.to=$("#rTo").value||rep.to;if(rep.from>rep.to){const t=rep.from;rep.from=rep.to;rep.to=t;}rep.which=$("#rWhich").value;drawReport();};
+  $("#rFrom").onchange=upd;$("#rTo").onchange=upd;$("#rWhich").onchange=upd;
+  $("#sheet").querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{[rep.from,rep.to]=quick[+b.dataset.q][1]();drawReport();});
+  $("#repPdf").onclick=()=>exportPdf(rows,K);$("#repWord").onclick=()=>exportWord(rows,K);
+}
+const repTitle="LAPORAN HASIL KONFERENSI IDIK";
+const periodTxt=()=>`Periode ${fmtLong(rep.from)} – ${fmtLong(rep.to)}`;
+const kpiTxt=(rows,K)=>`${rows.length} pasien · median konferensi→tindakan ${K.k.medianKT==null?"—":K.k.medianKT+" hari"} · pending >30 hari: ${K.k.overdue} · terverifikasi ${K.verified}/${rows.length}`;
+async function saveFile(filename,data){
+  try{await downloads.save({filename,data});}
+  catch(e){if(e&&(e.code==="declined"||e.code==="cancelled"))return;const m=$("#repMsg");if(m){m.className="status-line err";m.textContent="File tidak bisa disimpan. Coba format lain.";}}
+}
+async function exportPdf(rows,K){
+  const btn=$("#repPdf");btn.disabled=true;btn.textContent="Menyusun PDF…";
+  try{
+    await loadScript(LIB.jspdf);await loadScript(LIB.autotable);
+    const {jsPDF}=window.jspdf;const doc=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
+    const W=doc.internal.pageSize.getWidth(),H=doc.internal.pageSize.getHeight();
+    const clean=s=>String(s||"").replace(/✓/g,"(v)").replace(/[–—]/g,"-").replace(/→/g,"->").replace(/[^\x09\x0A\x0D\x20-\x7E -ÿ]/g,"");
+    doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text(repTitle,W/2,16,{align:"center"});
+    doc.setFont("helvetica","normal");doc.setFontSize(9.5);doc.text(clean(periodTxt()),W/2,22,{align:"center"});
+    doc.setFontSize(8.5);doc.setTextColor(80);doc.text(clean(kpiTxt(rows,K)),W/2,27,{align:"center"});doc.setTextColor(0);
+    let y=35,n=0;
+    for(const x of groups(rows)){
+      if(y>H-35){doc.addPage();y=16;}
+      doc.setFont("helvetica","bold");doc.setFontSize(10);doc.text(clean(`Tanggal pelaksanaan conference : ${fmtLong(x.date)}`),12,y);
+      doc.autoTable({startY:y+3,margin:{left:12,right:12,bottom:14},theme:"grid",
+        head:[["No","Nama","No RM","Kesimpulan Post Tindakan","Hasil Echo","Keputusan conference"]],
+        body:x.rows.map(p=>[String(++n),clean(p.nama),clean(p.rm),clean(p.dxPasca),clean(echoCell(p)),clean(decCell(p))]),
+        styles:{font:"helvetica",fontSize:8.5,cellPadding:2,valign:"top",lineColor:[190,200,200],lineWidth:.2,textColor:[20,33,41]},
+        headStyles:{fillColor:[11,59,71],textColor:[255,255,255],fontStyle:"bold",halign:"center"},
+        columnStyles:{0:{cellWidth:11,halign:"center"},1:{cellWidth:38},2:{cellWidth:24},3:{cellWidth:50},4:{cellWidth:72},5:{cellWidth:"auto"}}});
+      y=doc.lastAutoTable.finalY+10;
+    }
+    const pages=doc.internal.getNumberOfPages();
+    for(let i=1;i<=pages;i++){doc.setPage(i);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(110);doc.text(clean(`Heart Team Tracker - dicetak ${fmtLong(today())} - RAHASIA`),12,H-7);doc.text(`${i}/${pages}`,W-12,H-7,{align:"right"});}
+    await saveFile(`Laporan-Konferensi-IDIK_${rep.from}_sd_${rep.to}.pdf`,doc.output("blob"));
+  }catch(e){const m=$("#repMsg");if(m){m.className="status-line err";m.textContent="PDF gagal disusun. Periksa koneksi lalu coba lagi.";}}
+  if(btn.isConnected){btn.disabled=false;btn.textContent="Unduh PDF";}
+}
+async function exportWord(rows,K){
+  let n=0;const cell=t=>esc(t).replace(/\n/g,"<br>");
+  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>${repTitle}</title>
+<style>@page WordSection1{size:841.9pt 595.3pt;mso-page-orientation:landscape;margin:36pt 36pt 36pt 36pt}div.WordSection1{page:WordSection1}
+body{font-family:"Times New Roman",serif;font-size:10.5pt}h1{text-align:center;font-size:14pt;margin:0}p.c{text-align:center;margin:2pt 0}p.k{text-align:center;margin:0 0 12pt;color:#555;font-size:9pt}p.d{font-weight:bold;margin:12pt 0 4pt}
+table{border-collapse:collapse;width:100%}th,td{border:1px solid #333;padding:3pt 5pt;vertical-align:top;font-size:10pt}th{background:#D9E4E6}</style></head>
+<body><div class="WordSection1"><h1>${repTitle}</h1><p class="c">${esc(periodTxt())}</p><p class="k">${esc(kpiTxt(rows,K))}</p>
+${groups(rows).map(x=>`<p class="d">Tanggal pelaksanaan conference : ${esc(fmtLong(x.date))}</p><table><tr><th width="5%">No</th><th width="15%">Nama</th><th width="10%">No RM</th><th width="18%">Kesimpulan Post Tindakan</th><th width="26%">Hasil Echo</th><th>Keputusan conference</th></tr>
+${x.rows.map(p=>`<tr><td align="center">${++n}.</td><td>${cell(p.nama)}</td><td>${cell(p.rm)}</td><td>${cell(p.dxPasca)}</td><td>${cell(echoCell(p))}</td><td>${cell(decCell(p))}</td></tr>`).join("")}</table>`).join("")}
+<p style="font-size:8pt;color:#555;margin-top:14pt">Dicetak dari Heart Team Tracker ${esc(fmtLong(today()))} · RAHASIA</p></div></body></html>`;
+  await saveFile(`Laporan-Konferensi-IDIK_${rep.from}_sd_${rep.to}.doc`,new Blob(["﻿"+html],{type:"application/msword"}));
+}
+
+/* ---------- people ---------- */
+async function openPeople(){openSheet("people");await renderPeople();}
+async function renderPeople(){
+  await resolveProfiles(requests.map(r=>r.id).concat(staffDocs.map(s=>s.id)));
+  const P=id=>profiles[id]||{name:"",avatarUrl:""};const est=dbDocEstimate();
+  const roleSel=(id,val)=>`<select id="ra_${esc(id)}" aria-label="Peran">${Object.entries(ROLES).filter(([k])=>k!=="superadmin").map(([k,l])=>`<option value="${k}"${k===val?" selected":""}>${l}</option>`).join("")}</select>`;
+  $("#sheet").innerHTML=`<div class="sheet-head"><h2 id="sheetTitle">Pengguna</h2><button class="btn ghost" id="pClose">Tutup</button></div>
+  <div class="sheet-body">
+    <p class="status-line" style="margin:0">${SA?"Staf membuka alamat aplikasi, menekan <b>Daftar</b> (ID + password), lalu meminta akses. Setujui di sini dan pilih perannya. <b>Cabut</b> langsung memutus akses mereka ke data pasien.":"<b>Mencabut akses:</b> tekan Cabut di sini <b>dan</b> hapus orangnya dari menu Share di claude.ai. Undang staf lewat tombol <b>Share</b> di claude.ai. Setelah mereka membuka halaman dan meminta akses, setujui di sini. Staf yang sering mengunggah foto sebaiknya diberi akses <b>Editor</b> agar foto tersimpan resolusi penuh."}</p>
+    <ul class="perm"><li><b>Admin koordinator, perawat cath lab, fellow intervensi, PPDS</b>: mengisi semua data dari A sampai Z, termasuk keputusan konferensi, dan impor laporan.</li><li><b>Admin poli</b>: menambah pasien dan data penunjang/lab/follow-up yang sudah rilis; tidak bisa mengubah keputusan.</li><li><b>Admin echocardiography</b>: mengisi echocardiography, DSE, cardiac CT, dan cardiac MRI.</li><li><b>Dokter (verifikator)</b>: semua data, plus verifikasi, kunci, dan buka kunci keputusan.</li><li><b>Pemilik</b>: semua, plus menghapus data, mengatur pengguna, dan izin unduh.</li><li>Semua peran dapat membaca seluruh data yang sudah diunggah.</li></ul>
+    ${SA?"":`<div class="banner ${est>4000?"err":"lock"}"><span class="grow">Pemakaian database sekitar <b>${est.toLocaleString("id-ID")}</b> dari 5.000 dokumen${est>4000?". Hampir penuh: beri akses Editor ke pengunggah foto agar foto baru tidak memakai database.":"."}</span></div>`}
+    <div><div class="eyebrow" style="margin-bottom:8px">Menunggu persetujuan (${requests.length})</div><div class="people">${requests.length?requests.map(r=>`
+      <div class="person"><img alt="" src="${esc(P(r.id).avatarUrl)}"><div class="pn"><div>${esc(P(r.id).name||"Pengguna")}</div><span class="role">Diminta ${fmtDate(r.requestedAt)}</span></div>
+      ${roleSel(r.id,r.roleAsked)}<button class="btn small primary" data-okp="${esc(r.id)}">Setujui</button><button class="btn small danger" data-no="${esc(r.id)}">Tolak</button></div>`).join(""):`<div class="empty" style="padding:14px">Tidak ada permintaan.</div>`}</div></div>
+    <div><div class="eyebrow" style="margin-bottom:8px">Pengguna aktif (${staffDocs.length})</div><div class="people">${staffDocs.map(s=>`
+      <div class="person"><img alt="" src="${esc(P(s.id).avatarUrl)}"><div class="pn"><div>${esc(P(s.id).name||"Pengguna")}${s.id===me.id?" (Anda)":""}</div><span class="role">${esc(ROLES[s.role]||s.role)}${s.role==="superadmin"||s.ekspor?" · boleh unduh":""}</span></div>
+      ${s.id!==me.id?`${roleSel(s.id,s.role)}<label class="check"><input type="checkbox" data-exp="${esc(s.id)}"${s.ekspor?" checked":""}> Boleh unduh</label><button class="btn small" data-set="${esc(s.id)}">Simpan peran</button><button class="btn small danger" data-rm="${esc(s.id)}">Cabut</button>`:""}</div>`).join("")}</div></div>
+  </div>`;
+  $("#pClose").onclick=closeSheet;
+  $("#sheet").querySelectorAll("[data-okp]").forEach(b=>b.onclick=async()=>{const id=b.dataset.okp;b.disabled=true;
+    try{await db.doc("staff/"+id).set({role:$("#ra_"+id).value,ekspor:false,approvedAt:new Date().toISOString(),approvedBy:me.id});await db.doc("requests/"+id).delete();toast("Akses disetujui");}catch(e){toast("Gagal menyetujui");b.disabled=false;}});
+  $("#sheet").querySelectorAll("[data-set]").forEach(b=>b.onclick=async()=>{const id=b.dataset.set;try{await db.doc("staff/"+id).update({role:$("#ra_"+id).value});toast("Peran diperbarui");}catch(e){toast("Gagal");}});
+  $("#sheet").querySelectorAll("[data-exp]").forEach(cb=>cb.onchange=async()=>{try{await db.doc("staff/"+cb.dataset.exp).update({ekspor:cb.checked});toast(cb.checked?"Izin unduh diberikan":"Izin unduh dicabut");}catch(e){cb.checked=!cb.checked;toast("Gagal");}});
+  $("#sheet").querySelectorAll("[data-no]").forEach(b=>b.onclick=async()=>{try{await db.doc("requests/"+b.dataset.no).delete();toast("Permintaan ditolak");}catch(e){toast("Gagal");}});
+  $("#sheet").querySelectorAll("[data-rm]").forEach(b=>b.onclick=async()=>{try{await db.doc("staff/"+b.dataset.rm).delete();toast("Akses dicabut");}catch(e){toast("Gagal");}});
+}
+
+/* ---------- account & settings (standalone) ---------- */
+function openSettings(){
+  if(!SA)return;if(mode==="form"){toast("Simpan atau tutup form pasien dulu.");return;}
+  openSheet("settings");drawSettings();
+}
+function drawSettings(msg){
+  const has=window.HTTAuth.hasAiKey();
+  $("#sheet").innerHTML=`<div class="sheet-head"><h2 id="sheetTitle">Akun &amp; pengaturan</h2><button class="btn ghost" id="stClose">Tutup</button></div>
+  <div class="sheet-body">
+    <fieldset><legend>Akun</legend><div class="span"><b>${esc(me&&me.name||"")}</b><br><span class="sub">${esc(myRole?ROLES[myRole]:"Menunggu persetujuan")}</span></div>
+      <div class="span"><button class="btn danger" id="stLogout">Keluar</button></div></fieldset>
+    ${myRole==="superadmin"||myRole==="admin"||myRole==="dokter"?`<fieldset><legend>Baca foto &amp; laporan dengan AI (opsional)</legend>
+      <p class="status-line span" style="margin:0">Untuk membaca foto formulir dan PDF/Word otomatis, isi kunci API Claude (console.anthropic.com). Kunci hanya tersimpan di perangkat ini. Foto dan dokumen yang dibaca dikirim ke layanan Anthropic.</p>
+      <div class="f wide"><label for="stKey">Kunci API Claude ${has?"(sudah tersimpan)":""}</label><input id="stKey" type="password" autocomplete="off" placeholder="${has?"•••••••• (isi untuk mengganti)":"sk-ant-…"}"></div>
+      <div class="f wide"><label for="stModel">Model</label><input id="stModel" value="${esc(window.HTTAuth.aiModel())}" autocomplete="off"></div>
+      <div class="span" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="stSaveKey">Simpan kunci</button>${has?`<button class="btn danger" id="stDelKey">Hapus kunci</button>`:""}</div></fieldset>`:""}
+    <p class="status-line" id="stMsg" role="status">${esc(msg||"")}</p>
+  </div>`;
+  $("#stClose").onclick=closeSheet;
+  $("#stLogout").onclick=()=>{leaveApp();window.HTTAuth.logout();};
+  if($("#stSaveKey"))$("#stSaveKey").onclick=()=>{const k=$("#stKey").value.trim(),m=$("#stModel").value.trim();if(!k&&!has){$("#stMsg").textContent="Isi kunci API dulu.";return;}
+    if(k)window.HTTAuth.setAiKey(k,m);else window.HTTAuth.setModel(m);toast("Tersimpan. Halaman dimuat ulang.");setTimeout(()=>location.reload(),600);};
+  if($("#stDelKey"))$("#stDelKey").onclick=()=>{window.HTTAuth.setAiKey(null);toast("Kunci dihapus. Halaman dimuat ulang.");setTimeout(()=>location.reload(),600);};
+}
+
+/* ---------- CSV ---------- */
+$("#exportBtn").onclick=async()=>{
+  if(!downloads||!myExport)return;
+  const cols=FIELDS.concat(["locked","lockedAt"]);
+  const lines=[cols.map(k=>k==="locked"?"Terverifikasi":k==="lockedAt"?"Tgl verifikasi":LABEL[k]||k).concat(["Kolom perlu cek","Jumlah foto"]).map(C.csvCell).join(",")]
+    .concat(patients.map(p=>cols.map(k=>C.csvCell(k==="locked"?!!p.locked:SELECTS[k]?disp(k,p[k]||""):p[k])).concat([C.csvCell((p.perluCek||[]).map(k=>LABEL[k]||k).join("; ")),nFiles(p)]).join(",")));
+  try{await downloads.save({filename:`heart-team-${today()}.csv`,data:"﻿"+lines.join("\n")});}catch(e){if(e&&e.code!=="declined"&&e.code!=="cancelled")toast("Ekspor gagal");}
+};
+
+$("#newBtn").onclick=()=>{if(canCreate(myRole))openForm(null);};$("#fab").onclick=()=>{if(canCreate(myRole))openForm(null);};
+$("#importBtn").onclick=()=>{if(canImport(myRole))openImport();};$("#reportBtn").onclick=openReport;$("#peopleBtn").onclick=openPeople;
+window.addEventListener("pagehide",()=>{if(mode==="form"&&current&&dirty())writeDraft();});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&mode==="form"&&current&&dirty())writeDraft();});
+boot();
+})();
+</script>
+
+</body>
+</html>
